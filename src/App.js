@@ -4,7 +4,7 @@ import Dashboard from './pages/Dashboard';
 import Profile from './pages/Profile';
 import Reports from './pages/Reports';
 import Inventory from './pages/Inventory';
-import Stocks from './pages/Stocks';
+import Activity from './pages/Activity';
 
 function App() {
   return (
@@ -16,7 +16,7 @@ function App() {
           <Route path="/profile" element={<Profile />} />
           <Route path="/reports" element={<Reports />} />
           <Route path="/inventory" element={<Inventory />} />
-          <Route path="/stocks" element={<Stocks />} />
+          <Route path="/activity" element={<Activity />} />
         </Routes>
       </div>
     </Router>

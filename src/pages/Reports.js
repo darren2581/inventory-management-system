@@ -5,49 +5,9 @@ import { Link } from 'react-router-dom';
 
 const Reports = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [isSubMenuOpen, setSubMenuOpen] = useState(false);
 
   const toggleSidebar = () => {
-    if (isSidebarCollapsed) {
-      // If the sidebar is collapsed, open it without additional actions
-      setSidebarCollapsed(false);
-    } else {
-      // If the sidebar is open, close it and also close any open submenus
-      const allSubmenus = document.querySelectorAll('.sub-menu.show');
-      allSubmenus.forEach((submenu) => submenu.classList.remove('show')); // Close all submenus
-    
-      const allArrows = document.querySelectorAll('.dropdown-btn span.rotate');
-      allArrows.forEach((arrow) => arrow.classList.remove('rotate')); // Reset all arrows
-    
-      setSidebarCollapsed(true); // Collapse the sidebar
-    }
-  };
-
-  const toggleSubMenu = (e) => {
-    const button = e.currentTarget;
-    
-    // Open the sidebar if it's collapsed
-    if (isSidebarCollapsed) {
-      setSidebarCollapsed(false);
-    
-      // Use a timeout to ensure the submenu logic executes after the sidebar animation
-      setTimeout(() => {
-        const submenu = button.nextElementSibling;
-        const arrow = button.querySelector('span:last-child');
-        if (submenu) {
-          submenu.classList.add('show'); // Open the submenu
-          arrow.classList.add('rotate'); // Rotate the arrow
-        }
-      }, 300); // Match the sidebar's transition duration
-    } else {
-      // Handle normal submenu toggle behavior
-      const submenu = button.nextElementSibling;
-      const arrow = button.querySelector('span:last-child');
-      if (submenu) {
-        submenu.classList.toggle('show'); // Toggle submenu visibility
-        arrow.classList.toggle('rotate'); // Toggle arrow rotation
-      }
-    }
+    setSidebarCollapsed(!isSidebarCollapsed);
   };
 
   return (
@@ -70,12 +30,6 @@ const Reports = () => {
               <span>Dashboard</span>
             </Link>
           </li>
-          <li className="active">
-            <Link to="/reports">
-              <span className="material-symbols-outlined">description</span>
-              <span>Reports</span>
-            </Link>
-          </li>
           <li>
             <Link to="/inventory">
               <span className="material-symbols-outlined">inventory</span>
@@ -83,9 +37,15 @@ const Reports = () => {
             </Link>
           </li>
           <li>
-            <Link to="/stocks">
+            <Link to="/activity">
               <span className="material-symbols-outlined">inventory_2</span>
-              <span>Stocks</span>
+              <span>Activity</span>
+            </Link>
+          </li>
+          <li className="active">
+            <Link to="/reports">
+              <span className="material-symbols-outlined">description</span>
+              <span>Reports</span>
             </Link>
           </li>
           <li>
