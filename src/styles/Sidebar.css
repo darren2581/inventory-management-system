@@ -1,10 +1,10 @@
-*{
+* {
   margin: 0;
   padding: 0;
   line-height: 1.5rem;
 }
-  
-.App{
+
+.App {
   min-height: 100vh;
   min-height: 100dvh;
   background-color: var(--base-clr);
@@ -13,20 +13,21 @@
   grid-template-columns: auto 1fr;
 }
 
-#sidebar{
+#sidebar {
   box-sizing: border-box;
   height: 100vh;
   width: 250px;
   padding: 5px 1em;
   background-color: var(--base-clr);
   border-right: 1px solid var(--line-clr);
-  
+
   position: sticky;
   top: 0;
   align-self: start;
   transition: 300ms ease-in-out;
   overflow: hidden;
-  text-wrap: nowrap; /*To make sure the ToDo-List does not wrap*/
+  text-wrap: nowrap;
+  /*To make sure the ToDo-List does not wrap*/
 }
 
 .App.collapsed #sidebar {
@@ -34,24 +35,25 @@
   width: 60px;
 }
 
-#sidebar ul{
+#sidebar ul {
   list-style: none;
 }
 
-#sidebar ul .first-child{
+#sidebar ul .first-child {
   display: flex;
   justify-content: flex-end;
   margin-bottom: 16px;
-  .logo{
+
+  .logo {
     font-weight: 600;
   }
 }
 
-#sidebar ul li.active a{
+#sidebar ul li.active a {
   color: var(--accent-clt);
 }
 
-#sidebar a, #sidebar .dropdown-btn, #sidebar .logo{
+#sidebar a, #sidebar .dropdown-btn, #sidebar .logo {
   border-radius: .5em;
   padding: .85em;
   text-decoration: none;
@@ -61,7 +63,7 @@
   gap: 1em;
 }
 
-.dropdown-btn{
+.dropdown-btn {
   width: 100%;
   text-align: left;
   background: none;
@@ -70,42 +72,44 @@
   cursor: pointer;
 }
 
-#sidebar a span .dropdown, #sidebar .dropdown-btn .dropdown{
+#sidebar a span .dropdown, #sidebar .dropdown-btn .dropdown {
   flex-grow: 1;
 }
 
-#sidebar a:hover, #sidebar .dropdown-btn:hover{
+#sidebar a:hover, #sidebar .dropdown-btn:hover {
   background-color: var(--hover-clr);
 }
 
-#sidebar .sub-menu{
+#sidebar .sub-menu {
   display: grid;
   grid-template-rows: 0fr;
   transition: 300ms ease-in-out;
 
-  div{
+  div {
     overflow: hidden;
   }
 }
 
-#sidebar .sub-menu.show{
+#sidebar .sub-menu.show {
   grid-template-rows: 1fr;
 }
 
 .dropdown-btn span:last-child {
-  transition: transform 0.3s ease; /* Smooth transition for the rotation */
+  transition: transform 0.3s ease;
+  /* Smooth transition for the rotation */
 }
 
 .dropdown-btn span.rotate {
-  transform: rotate(180deg); /* Rotate the arrow 180 degrees */
+  transform: rotate(180deg);
+  /* Rotate the arrow 180 degrees */
 }
 
-#sidebar .sub-menu a{
+#sidebar .sub-menu a {
   padding-left: 2em;
 }
 
-#toggle-btn{
-  margin-left:auto;
+#toggle-btn {
+  margin-left: auto;
   height: 50px;
   padding: 1em;
   border: none;
@@ -114,20 +118,17 @@
   cursor: pointer;
   color: var(--text-clr);
 
-  span{
+  span {
     transition: rotate 150ms ease;
   }
 }
 
-#toggle-btn:hover{
+#toggle-btn:hover {
   background-color: var(--hover-clr);
 }
 
 
-
-
-
-main{
+main {
   padding: min(30px, 7%);
 }
 
@@ -177,7 +178,7 @@ main{
     justify-content: space-between;
     overflow-x: auto;
     overflow-y: hidden;
-    white-space: nowrap; 
+    white-space: nowrap;
   }
 
   #sidebar ul {
@@ -185,8 +186,8 @@ main{
     padding: 0;
     gap: 1em;
     list-style: none;
-    width: 100%; 
-    justify-content: space-between; 
+    width: 100%;
+    justify-content: space-between;
   }
 
   #sidebar ul li {
@@ -195,13 +196,13 @@ main{
   }
 
   #sidebar ul .first-child {
-    display: none; 
+    display: none;
   }
 
   #sidebar ul li a,
   #sidebar ul li .dropdown-btn {
     padding: 0.5em;
-    width: 60px; 
+    width: 60px;
     height: 60px;
     justify-content: center;
     text-align: center;
@@ -213,19 +214,19 @@ main{
   #sidebar ul li a span,
   #sidebar ul li .dropdown-btn span {
     display: block;
-    font-size: 1.2rem; 
+    font-size: 1.2rem;
   }
 
   #sidebar ul li a span:nth-child(2),
   #sidebar ul li .dropdown-btn span:nth-child(2) {
-    display: none; 
+    display: none;
   }
 
   #sidebar ul li .dropdown-btn span:last-child {
-    display: none; 
+    display: none;
   }
 
   #sidebar ul li .sub-menu {
-    display: none; 
+    display: none;
   }
 }

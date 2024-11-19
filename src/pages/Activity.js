@@ -4,11 +4,11 @@ import '../styles/Reports.css';
 import { Link } from 'react-router-dom';
 
 const Activity = () => {
-    const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
 
-    const toggleSidebar = () => {
-        setSidebarCollapsed(!isSidebarCollapsed);
-    };
+  const toggleSidebar = () => {
+    setSidebarCollapsed(!isSidebarCollapsed);
+  };
 
   return (
     <div className={`App ${isSidebarCollapsed ? 'collapsed' : ''}`}>

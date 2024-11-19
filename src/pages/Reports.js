@@ -64,14 +64,14 @@ const Reports = () => {
             You can generate, view, and export reports for inventory, stocks, sales, and more.
             Keep track of your business's performance through detailed and insightful reports.
           </p>
-          
+
           {/* Example report section */}
           <section className="report-section">
             <h3>Monthly Sales Report</h3>
             <p>This report provides an overview of the sales activities for the month. It includes total sales, product performance, and more.</p>
             <button className="btn">Generate Report</button>
           </section>
-          
+
           <section className="report-section">
             <h3>Inventory Status Report</h3>
             <p>This report shows the current status of your inventory, highlighting items in stock, low stock, and out of stock.</p>

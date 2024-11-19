@@ -56,17 +56,17 @@ const Inventory = () => {
           </li>
         </ul>
       </nav>
-      <main>
+      <div className='inventory'>
         <div className="container">
-          <h2>Inventory Management</h2>
-          <p>
+          <h2 className='h2-Inventory'>Inventory</h2>
+          <p className='p-Inventory'>
             The Inventory section allows you to view, manage, and update your product stock levels.
             You can monitor your inventory, track products, and make necessary updates in the system.
           </p>
-          
+
           {/* Example Inventory Table */}
           <section className="inventory-table">
-            <h3>Current Inventory</h3>
+            <h3 className='head-inventory'>Current Inventory</h3>
             <table>
               <thead>
                 <tr>
@@ -132,7 +132,7 @@ const Inventory = () => {
             </form>
           </section>
         </div>
-      </main>
+      </div>
     </div>
   );
 };

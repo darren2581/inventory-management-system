@@ -1,0 +1,130 @@
+.inventory {
+    margin-bottom: 60px;
+    flex: 1;
+    padding: 30px;
+    background-color: var(--base-clr);
+}
+
+.h2-Inventory {
+    font-size: 32px;
+    color: var(--text-clr);
+    margin-bottom: 15px;
+}
+
+.p-Inventory {
+    font-size: 16px;
+    color: var(--secondary-text-clr);
+    margin-bottom: 30px;
+}
+
+/* Inventory Table */
+.inventory-table {
+    margin-top: 40px;
+}
+
+.inventory-table h3 {
+    font-size: 24px;
+    color: var(--text-clr);
+    margin-bottom: 20px;
+}
+
+.inventory-table table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--div-backgrounud-clr);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.inventory-table th, .inventory-table td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid var(--line-clr);
+}
+
+.inventory-table th {
+    background-color: var(--base-clr);
+    color: var(--text-clr);
+    font-weight: bold;
+}
+
+.inventory-table td {
+    color: var(--div-text-clr);
+}
+
+.inventory-table tr:hover {
+    background-color: var(--div-hover-clr);
+}
+
+.inventory-table td button {
+    background-color: var(--btn-color);
+    color: white;
+    border: none;
+    padding: 8px 14px;
+    cursor: pointer;
+    border-radius: 4px;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+.inventory-table td button:hover {
+    background-color: var(--btn-hover-clr);
+}
+
+/* Add New Product Section */
+.add-product {
+    margin-top: 40px;
+    padding: 20px;
+    background-color: var(--div-backgrounud-clr);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+.add-product h3 {
+    font-size: 24px;
+    color: var(--div-text-clr);
+    margin-bottom: 20px;
+}
+
+.add-product form {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 20px;
+}
+
+.add-product form label {
+    font-size: 16px;
+    color: var(--div-text-clr);
+    margin-bottom: 5px;
+}
+
+.add-product form input,
+.add-product form select {
+    padding: 12px;
+    font-size: 16px;
+    border: 1px solid var(--line-clr);
+    border-radius: 4px;
+    background-color: #f9f9f9;
+
+    transition: border-color 0.3s ease;
+}
+
+.add-product form input:focus,
+.add-product form select:focus {
+    border-color: var(--accent-clt);
+    outline: none;
+}
+
+.add-product form button {
+    padding: 12px;
+    background-color: var(--btn-color);
+    color: white;
+    font-size: 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.add-product form button:hover {
+    background-color: var(--btn-hover-clr);
+}
