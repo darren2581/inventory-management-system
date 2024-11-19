@@ -183,10 +183,10 @@
       bottom: 0;
       display: flex;
       align-items: center;
-      justify-content: space-between; /* Evenly spaces the items */
-      overflow-x: auto; /* Enable horizontal scrolling */
+      justify-content: space-between;
+      overflow-x: auto;
       overflow-y: hidden;
-      white-space: nowrap; /* Prevent items from wrapping */
+      white-space: nowrap; 
     }
   
     #sidebar ul {
@@ -194,8 +194,8 @@
       padding: 0;
       gap: 1em;
       list-style: none;
-      width: 100%; /* Ensure it fills the entire width */
-      justify-content: space-between; /* Distribute items evenly */
+      width: 100%; 
+      justify-content: space-between; 
     }
   
     #sidebar ul li {
@@ -204,13 +204,13 @@
     }
   
     #sidebar ul .first-child {
-      display: none; /* Hide logo and toggle button */
+      display: none; 
     }
   
     #sidebar ul li a,
     #sidebar ul li .dropdown-btn {
       padding: 0.5em;
-      width: 60px; /* Adjust size for compact icons */
+      width: 60px; 
       height: 60px;
       justify-content: center;
       text-align: center;
@@ -222,20 +222,20 @@
     #sidebar ul li a span,
     #sidebar ul li .dropdown-btn span {
       display: block;
-      font-size: 1.2rem; /* Adjust icon size */
+      font-size: 1.2rem; 
     }
   
     #sidebar ul li a span:nth-child(2),
     #sidebar ul li .dropdown-btn span:nth-child(2) {
-      display: none; /* Hide "Create" and "ToDo-List" labels */
+      display: none; 
     }
   
     #sidebar ul li .dropdown-btn span:last-child {
-      display: none; /* Hide dropdown arrow icons */
+      display: none; 
     }
   
     #sidebar ul li .sub-menu {
-      display: none; /* Ensure submenus remain hidden */
+      display: none; 
     }
   }
   

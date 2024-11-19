@@ -1,52 +1,51 @@
-import {React, useState} from 'react'
-import '../styles/Sidebar.css'
+import { React, useState } from 'react';
+import '../styles/Sidebar.css';
+import Dashboard from '../pages/Dashboard';
 
 const Sidebar = () => {
-    const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
-    const [isSubMenuOpen, setSubMenuOpen] = useState(false);
+  const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [activeMenuItem, setActiveMenuItem] = useState('#/dashboard'); // Default active item
 
-    const toggleSidebar = () => {
-        if (isSidebarCollapsed) {
-        // If the sidebar is collapsed, open it without additional actions
-        setSidebarCollapsed(false);
-        } else {
-        // If the sidebar is open, close it and also close any open submenus
-        const allSubmenus = document.querySelectorAll('.sub-menu.show');
-        allSubmenus.forEach((submenu) => submenu.classList.remove('show')); // Close all submenus
-    
-        const allArrows = document.querySelectorAll('.dropdown-btn span.rotate');
-        allArrows.forEach((arrow) => arrow.classList.remove('rotate')); // Reset all arrows
-    
-        setSidebarCollapsed(true); // Collapse the sidebar
-        }
-    };
+  const toggleSidebar = () => {
+    if (isSidebarCollapsed) {
+      setSidebarCollapsed(false);
+    } else {
+      const allSubmenus = document.querySelectorAll('.sub-menu.show');
+      allSubmenus.forEach((submenu) => submenu.classList.remove('show'));
 
-    const toggleSubMenu = (e) => {
-        const button = e.currentTarget;
-    
-        // Open the sidebar if it's collapsed
-        if (isSidebarCollapsed) {
-        setSidebarCollapsed(false);
-    
-        // Use a timeout to ensure the submenu logic executes after the sidebar animation
-        setTimeout(() => {
-            const submenu = button.nextElementSibling;
-            const arrow = button.querySelector('span:last-child');
-            if (submenu) {
-            submenu.classList.add('show'); // Open the submenu
-            arrow.classList.add('rotate'); // Rotate the arrow
-            }
-        }, 300); // Match the sidebar's transition duration
-        } else {
-        // Handle normal submenu toggle behavior
+      const allArrows = document.querySelectorAll('.dropdown-btn span.rotate');
+      allArrows.forEach((arrow) => arrow.classList.remove('rotate'));
+
+      setSidebarCollapsed(true);
+    }
+  };
+
+  const toggleSubMenu = (e) => {
+    const button = e.currentTarget;
+
+    if (isSidebarCollapsed) {
+      setSidebarCollapsed(false);
+      setTimeout(() => {
         const submenu = button.nextElementSibling;
         const arrow = button.querySelector('span:last-child');
         if (submenu) {
-            submenu.classList.toggle('show'); // Toggle submenu visibility
-            arrow.classList.toggle('rotate'); // Toggle arrow rotation
+          submenu.classList.add('show');
+          arrow.classList.add('rotate');
         }
-        }
-    };
+      }, 300);
+    } else {
+      const submenu = button.nextElementSibling;
+      const arrow = button.querySelector('span:last-child');
+      if (submenu) {
+        submenu.classList.toggle('show');
+        arrow.classList.toggle('rotate');
+      }
+    }
+  };
+
+  const handleMenuItemClick = (menuItem) => {
+    setActiveMenuItem(menuItem); // Update the active menu item
+  };
 
   return (
     <div className={`App ${isSidebarCollapsed ? 'collapsed' : ''}`}>
@@ -62,71 +61,67 @@ const Sidebar = () => {
               </span>
             </button>
           </li>
-          <li className="active">
-            <a href="#">
-              <span className="material-symbols-outlined">home</span>
-              <span>Home</span>
-            </a>
-          </li>
-          <li>
+          <li
+            className={activeMenuItem === '#/dashboard' ? 'active' : ''}
+            onClick={() => handleMenuItemClick('#/dashboard')}
+          >
             <a href="#/dashboard">
               <span className="material-symbols-outlined">dashboard</span>
               <span>Dashboard</span>
             </a>
           </li>
-          <li>
-            <button onClick={toggleSubMenu} className="dropdown-btn">
-              <span className="material-symbols-outlined">create_new_folder</span>
-              <span className="dropdown">Create</span>
-              <span className="material-symbols-outlined">keyboard_arrow_down</span>
-            </button>
-            <ul className="sub-menu">
-              <div>
-                <li>
-                  <a href="#">Folder</a>
-                </li>
-                <li>
-                  <a href="#">Document</a>
-                </li>
-                <li>
-                  <a href="#">Project</a>
-                </li>
-              </div>
-            </ul>
+          <li
+            className={activeMenuItem === '#/reports' ? 'active' : ''}
+            onClick={() => handleMenuItemClick('#/reports')}
+          >
+            <a href='#/dashboard'>
+              <span className="material-symbols-outlined">description</span>
+              <span>Reports</span>
+            </a>
           </li>
-          <li>
-            <button onClick={toggleSubMenu} className="dropdown-btn">
-              <span className="material-symbols-outlined">checklist</span>
-              <span className="dropdown">ToDo-List</span>
-              <span className="material-symbols-outlined">keyboard_arrow_down</span>
-            </button>
-            <ul className="sub-menu">
-              <div>
-                <li>
-                  <a href="#">Work</a>
-                </li>
-                <li>
-                  <a href="#">Private</a>
-                </li>
-                <li>
-                  <a href="#">Coding</a>
-                </li>
-                <li>
-                  <a href="#">Gardening</a>
-                </li>
-                <li>
-                  <a href="#">School</a>
-                </li>
-              </div>
-            </ul>
-          </li>
-          <li>
+
+          <li
+            className={activeMenuItem === '#/inventory' ? 'active' : ''}
+            onClick={() => handleMenuItemClick('#/inventory')}
+          >
             <a href="#">
-              <span className="material-symbols-outlined">calendar_month</span>
-              <span>Calender</span>
+              <span className="material-symbols-outlined">inventory</span>
+              <span>Inventory</span>
             </a>
           </li>
           <li>
+            <button onClick={toggleSubMenu} className="dropdown-btn">
+              <span className="material-symbols-outlined">inventory_2</span>
+              <span className="dropdown">Stocks</span>
+              <span className="material-symbols-outlined">keyboard_arrow_down</span>
+            </button>
+            <ul className="sub-menu">
+              <div>
+                <li
+                  className={activeMenuItem === '#/in-stock' ? 'active' : ''}
+                  onClick={() => handleMenuItemClick('#/in-stock')}
+                >
+                  <a href="#">In Stock</a>
+                </li>
+                <li
+                  className={activeMenuItem === '#/low-stock' ? 'active' : ''}
+                  onClick={() => handleMenuItemClick('#/low-stock')}
+                >
+                  <a href="#">Low Stock</a>
+                </li>
+                <li
+                  className={activeMenuItem === '#/out-stock' ? 'active' : ''}
+                  onClick={() => handleMenuItemClick('#/out-stock')}
+                >
+                  <a href="#">Out of Stock</a>
+                </li>
+              </div>
+            </ul>
+          </li>
+          <li
+            className={activeMenuItem === '#/profile' ? 'active' : ''}
+            onClick={() => handleMenuItemClick('#/profile')}
+          >
             <a href="#">
               <span className="material-symbols-outlined">person</span>
               <span>Profile</span>
@@ -135,18 +130,10 @@ const Sidebar = () => {
         </ul>
       </nav>
       <main>
-        <div className="container">
-          <h2>React App</h2>
-          <p>
-            Learning to code can open doors to endless possibilities, from creating innovative
-            applications to solving real-world problems. With consistent practice, the once-complicated
-            syntax becomes second nature. Start small, experiment, and embrace mistakes—they’re part of
-            the journey. Every line of code brings you closer to mastering this powerful skillset.
-          </p>
-        </div>
+        <Dashboard />
       </main>
     </div>
-  )
-}
+  );
+};
 
-export default Sidebar
+export default Sidebar;
