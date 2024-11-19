@@ -1,5 +1,7 @@
 import { React, useState } from 'react';
+import '../App.css';
 import '../styles/Sidebar.css';
+import '../styles/Dashboard.css';
 import { Link } from 'react-router-dom';
 
 const Dashboard = () => {

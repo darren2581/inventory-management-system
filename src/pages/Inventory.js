@@ -1,5 +1,6 @@
 import { React, useState } from 'react';
 import '../styles/Sidebar.css';
+import '../styles/Inventory.css';
 import { Link } from 'react-router-dom';
 
 const Inventory = () => {
