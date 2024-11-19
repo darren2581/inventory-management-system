@@ -1,51 +1,52 @@
-import { React, useState } from 'react';
-import '../styles/Sidebar.css';
-import Dashboard from '../pages/Dashboard';
+import {React, useState} from 'react'
+import '../styles/Sidebar.css'
 
 const Sidebar = () => {
-  const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [activeMenuItem, setActiveMenuItem] = useState('#/dashboard'); // Default active item
+    const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
+    const [isSubMenuOpen, setSubMenuOpen] = useState(false);
 
-  const toggleSidebar = () => {
-    if (isSidebarCollapsed) {
-      setSidebarCollapsed(false);
-    } else {
-      const allSubmenus = document.querySelectorAll('.sub-menu.show');
-      allSubmenus.forEach((submenu) => submenu.classList.remove('show'));
+    const toggleSidebar = () => {
+        if (isSidebarCollapsed) {
+        // If the sidebar is collapsed, open it without additional actions
+        setSidebarCollapsed(false);
+        } else {
+        // If the sidebar is open, close it and also close any open submenus
+        const allSubmenus = document.querySelectorAll('.sub-menu.show');
+        allSubmenus.forEach((submenu) => submenu.classList.remove('show')); // Close all submenus
+    
+        const allArrows = document.querySelectorAll('.dropdown-btn span.rotate');
+        allArrows.forEach((arrow) => arrow.classList.remove('rotate')); // Reset all arrows
+    
+        setSidebarCollapsed(true); // Collapse the sidebar
+        }
+    };
 
-      const allArrows = document.querySelectorAll('.dropdown-btn span.rotate');
-      allArrows.forEach((arrow) => arrow.classList.remove('rotate'));
-
-      setSidebarCollapsed(true);
-    }
-  };
-
-  const toggleSubMenu = (e) => {
-    const button = e.currentTarget;
-
-    if (isSidebarCollapsed) {
-      setSidebarCollapsed(false);
-      setTimeout(() => {
+    const toggleSubMenu = (e) => {
+        const button = e.currentTarget;
+    
+        // Open the sidebar if it's collapsed
+        if (isSidebarCollapsed) {
+        setSidebarCollapsed(false);
+    
+        // Use a timeout to ensure the submenu logic executes after the sidebar animation
+        setTimeout(() => {
+            const submenu = button.nextElementSibling;
+            const arrow = button.querySelector('span:last-child');
+            if (submenu) {
+            submenu.classList.add('show'); // Open the submenu
+            arrow.classList.add('rotate'); // Rotate the arrow
+            }
+        }, 300); // Match the sidebar's transition duration
+        } else {
+        // Handle normal submenu toggle behavior
         const submenu = button.nextElementSibling;
         const arrow = button.querySelector('span:last-child');
         if (submenu) {
-          submenu.classList.add('show');
-          arrow.classList.add('rotate');
+            submenu.classList.toggle('show'); // Toggle submenu visibility
+            arrow.classList.toggle('rotate'); // Toggle arrow rotation
         }
-      }, 300);
-    } else {
-      const submenu = button.nextElementSibling;
-      const arrow = button.querySelector('span:last-child');
-      if (submenu) {
-        submenu.classList.toggle('show');
-        arrow.classList.toggle('rotate');
-      }
-    }
-  };
-
-  const handleMenuItemClick = (menuItem) => {
-    setActiveMenuItem(menuItem); // Update the active menu item
-  };
+        }
+    };
 
   return (
     <div className={`App ${isSidebarCollapsed ? 'collapsed' : ''}`}>
@@ -61,67 +62,31 @@ const Sidebar = () => {
               </span>
             </button>
           </li>
-          <li
-            className={activeMenuItem === '#/dashboard' ? 'active' : ''}
-            onClick={() => handleMenuItemClick('#/dashboard')}
-          >
+          <li className="active">
             <a href="#/dashboard">
               <span className="material-symbols-outlined">dashboard</span>
               <span>Dashboard</span>
             </a>
           </li>
-          <li
-            className={activeMenuItem === '#/reports' ? 'active' : ''}
-            onClick={() => handleMenuItemClick('#/reports')}
-          >
-            <a href='#/dashboard'>
+          <li>
+            <button onClick={toggleSubMenu} className="dropdown-btn">
               <span className="material-symbols-outlined">description</span>
-              <span>Reports</span>
-            </a>
+              <span className="dropdown">Reports</span>
+            </button>
           </li>
-
-          <li
-            className={activeMenuItem === '#/inventory' ? 'active' : ''}
-            onClick={() => handleMenuItemClick('#/inventory')}
-          >
+          <li>
             <a href="#">
               <span className="material-symbols-outlined">inventory</span>
               <span>Inventory</span>
             </a>
           </li>
           <li>
-            <button onClick={toggleSubMenu} className="dropdown-btn">
+            <a href="#">
               <span className="material-symbols-outlined">inventory_2</span>
               <span className="dropdown">Stocks</span>
-              <span className="material-symbols-outlined">keyboard_arrow_down</span>
-            </button>
-            <ul className="sub-menu">
-              <div>
-                <li
-                  className={activeMenuItem === '#/in-stock' ? 'active' : ''}
-                  onClick={() => handleMenuItemClick('#/in-stock')}
-                >
-                  <a href="#">In Stock</a>
-                </li>
-                <li
-                  className={activeMenuItem === '#/low-stock' ? 'active' : ''}
-                  onClick={() => handleMenuItemClick('#/low-stock')}
-                >
-                  <a href="#">Low Stock</a>
-                </li>
-                <li
-                  className={activeMenuItem === '#/out-stock' ? 'active' : ''}
-                  onClick={() => handleMenuItemClick('#/out-stock')}
-                >
-                  <a href="#">Out of Stock</a>
-                </li>
-              </div>
-            </ul>
+            </a>
           </li>
-          <li
-            className={activeMenuItem === '#/profile' ? 'active' : ''}
-            onClick={() => handleMenuItemClick('#/profile')}
-          >
+          <li>
             <a href="#">
               <span className="material-symbols-outlined">person</span>
               <span>Profile</span>
@@ -130,10 +95,18 @@ const Sidebar = () => {
         </ul>
       </nav>
       <main>
-        <Dashboard />
+        <div className="container">
+          <h2>Dashboard</h2>
+          <p>
+            Learning to code can open doors to endless possibilities, from creating innovative
+            applications to solving real-world problems. With consistent practice, the once-complicated
+            syntax becomes second nature. Start small, experiment, and embrace mistakes—they’re part of
+            the journey. Every line of code brings you closer to mastering this powerful skillset.
+          </p>
+        </div>
       </main>
     </div>
-  );
-};
+  )
+}
 
-export default Sidebar;
+export default Sidebar
