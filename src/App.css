@@ -1,13 +1,13 @@
-:root{
-    --base-clr: #11121a;
-    --line-clr: #42434a;
-    --hover-clr: #222533;
-    --text-clr: #e6e6ef;
-    --accent-clt: #5e63ff;
-    --secondary-text-clr: #b0b3c1;
-    --div-backgrounud-clr: #e9f0f9;
-    --div-text-clr: #333333;
-    --div-hover-clr: #c5c5c5;
-    --btn-color: #1e5a8a;
-    --btn-hover-clr: #357ab7;
-  }
+:root {
+  --base-clr: #11121a;
+  --line-clr: #42434a;
+  --hover-clr: #222533;
+  --text-clr: #e6e6ef;
+  --accent-clt: #5e63ff;
+  --secondary-text-clr: #b0b3c1;
+  --div-backgrounud-clr: #e9f0f9;
+  --div-text-clr: #333333;
+  --div-hover-clr: #c5c5c5;
+  --btn-color: #1e5a8a;
+  --btn-hover-clr: #357ab7;
+}

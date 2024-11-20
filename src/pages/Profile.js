@@ -57,18 +57,24 @@ const Profile = () => {
         </ul>
       </nav>
       <div className='profile'>
-        <div className="container">
+        <div className="container-profile">
           <h2>Profile</h2>
           <p>
             Welcome to your profile page. Here you can update your personal information, manage your settings, and view your activity.
             Take control of your account and make sure everything is up to date!
           </p>
-          <section className="profile-info">
+          <div className="profile-info">
             <h3>Personal Information</h3>
-            <p>Name: John Doe</p>
-            <p>Email: john.doe@example.com</p>
+            <p>Name: Darren Tan</p>
+            <p>Gender: Male</p>
+            <p>Email: darren2581@gmail.com</p>
+            <p>Phone: 012-3456789</p>
+            <p>Address: 123, Jalan ABC, 12345, Kuala Lumpur</p>
             <p>Role: Admin</p>
-          </section>
+          </div>
+          <button className="logout-btn" onClick={() => alert('Logging out...')}>
+            Logout
+          </button>
         </div>
       </div>
     </div>

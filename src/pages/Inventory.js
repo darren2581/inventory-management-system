@@ -73,7 +73,7 @@ const Inventory = () => {
         </ul>
       </nav>
       <div className="inventory">
-        <div className="container">
+        <div className="container-inventory">
           <h2 className="h2-Inventory">Inventory</h2>
           <p className="p-Inventory">
             Theis Inventory section allows you to view, manage, and update your product stock levels.
