@@ -7,11 +7,11 @@ const Inventory = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [products, setProducts] = useState([
-    { name: 'Product A', category: 'Electronics', quantity: 120, status: 'In Stock' },
-    { name: 'Product B', category: 'Furniture', quantity: 30, status: 'Low Stock' },
-    { name: 'GirlsCode (XL)', category: 'Clothing', quantity: 0, status: 'Out of Stock' },
-    { name: 'GirlsCode (L)', category: 'Clothing', quantity: 5, status: 'In Stock' },
-    { name: 'GirlsCode (M)', category: 'Clothing', quantity: 0, status: 'Out of Stock' },
+    { id: '001', name: 'Product A', quantity: 120, status: 'In Stock' },
+    { id: '002', name: 'Product B', quantity: 30, status: 'Low Stock' },
+    { id: '003', name: 'GirlsCode (XL)', quantity: 0, status: 'Out of Stock' },
+    { id: '004', name: 'GirlsCode (L)', quantity: 5, status: 'In Stock' },
+    { id: '005', name: 'GirlsCode (M)', quantity: 0, status: 'Out of Stock' },
   ]);
 
   const toggleSidebar = () => {
@@ -87,8 +87,8 @@ const Inventory = () => {
             <form>
               <label>Product Name:</label>
               <input type="text" placeholder="Enter product name" />
-              <label>Category:</label>
-              <input type="text" placeholder="Enter category" />
+              <label>Unique ID:</label>
+              <input type="text" placeholder="Enter unique id" />
               <label>Quantity:</label>
               <input type="number" placeholder="Enter quantity" />
               <label>Status:</label>
@@ -120,8 +120,8 @@ const Inventory = () => {
             <table>
               <thead>
                 <tr>
+                  <th>Unique ID</th>
                   <th>Product</th>
-                  <th>Category</th>
                   <th>Quantity</th>
                   <th>Status</th>
                   <th>Actions</th>
@@ -130,8 +130,8 @@ const Inventory = () => {
               <tbody>
                 {filteredProducts.map((product, index) => (
                   <tr key={index}>
+                    <td>{product.id}</td>
                     <td>{product.name}</td>
-                    <td>{product.category}</td>
                     <td>{product.quantity}</td>
                     <td>{product.status}</td>
                     <td>

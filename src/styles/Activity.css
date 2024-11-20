@@ -1,0 +1,139 @@
+.activity {
+    background-color: var(--base-clr);
+    color: var(--text-clr);
+    padding: 2rem;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    margin-bottom: 60px;
+}
+
+.container-activity {
+    background-color: var(--base-clr);
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid var(--line-clr);
+    box-shadow: 0px 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.container-activity h2 {
+    font-size: 2rem;
+    color: var(--accent-clt);
+    margin-bottom: 2rem;
+}
+
+.inventory-management {
+    margin-top: 3rem;
+}
+
+.inventory-management h3 {
+    font-size: 24px;
+    color: var(--accent-clt);
+    margin-bottom: 1.5rem;
+}
+
+.item-actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+.item-actions label {
+    font-size: 16px;
+    color: var(--secondary-text-clr);
+}
+
+.item-actions input {
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid var(--line-clr);
+    border-radius: 5px;
+    background-color: #fff;
+    color: var(--text-clr);
+}
+
+.item-actions input:focus {
+    outline: none;
+    border-color: var(--accent-clt);
+}
+
+.item-actions button {
+    padding: 0.8rem 1.5rem;
+    font-size: 1rem;
+    background-color: var(--btn-color);
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.item-actions button:hover {
+    background-color: var(--btn-hover-clr);
+}
+
+.inventory-list {
+    margin-top: 2rem;
+}
+
+.inventory-list h3 {
+    font-size: 24px;
+    color: var(--accent-clt);
+    margin-bottom: 1rem;
+}
+
+.inventory-list ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+.inventory-list li {
+    font-size: 1.1rem;
+    color: var(--secondary-text-clr);
+    padding: 0.8rem;
+    border-bottom: 1px solid var(--line-clr);
+}
+
+.inventory-list li:last-child {
+    border-bottom: none;
+}
+
+/* Inventory List Table */
+.inventory-list {
+    margin-top: 40px;
+}
+
+.inventory-list h3 {
+    font-size: 24px;
+    color: var(--accent-clt);
+    margin-bottom: 20px;
+}
+
+.inventory-list table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: var(--div-backgrounud-clr);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.inventory-list th, 
+.inventory-list td {
+    padding: 12px;
+    text-align: left;
+    border: 1px solid var(--line-clr);
+}
+
+.inventory-list th {
+    background-color: var(--hover-clr);
+    color: var(--secondary-text-clr);
+    font-weight: bold;
+}
+
+.inventory-list td {
+    color: var(--hover-clr);
+}
+
+.inventory-list tr:hover {
+    background-color: var(--div-hover-clr);
+}
