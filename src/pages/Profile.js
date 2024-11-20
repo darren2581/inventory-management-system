@@ -42,12 +42,6 @@ const Profile = () => {
               <span>Activity</span>
             </Link>
           </li>
-          <li>
-            <Link to="/reports">
-              <span className="material-symbols-outlined">description</span>
-              <span>Reports</span>
-            </Link>
-          </li>
           <li className="active">
             <Link to="/profile">
               <span className="material-symbols-outlined">person</span>

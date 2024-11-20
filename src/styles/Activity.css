@@ -117,7 +117,7 @@
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
-.inventory-list th, 
+.inventory-list th,
 .inventory-list td {
     padding: 12px;
     text-align: left;
@@ -136,4 +136,12 @@
 
 .inventory-list tr:hover {
     background-color: var(--div-hover-clr);
+}
+
+@media (max-width: 500px) {
+    .container-activity {
+        padding: 0;
+        border-radius: 10px;
+        border: none;
+    }
 }

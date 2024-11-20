@@ -59,12 +59,6 @@ const Inventory = () => {
             </Link>
           </li>
           <li>
-            <Link to="/reports">
-              <span className="material-symbols-outlined">description</span>
-              <span>Reports</span>
-            </Link>
-          </li>
-          <li>
             <Link to="/profile">
               <span className="material-symbols-outlined">person</span>
               <span>Profile</span>
@@ -76,7 +70,7 @@ const Inventory = () => {
         <div className="container-inventory">
           <h2 className="h2-Inventory">Inventory</h2>
           <p className="p-Inventory">
-            Theis Inventory section allows you to view, manage, and update your product stock levels.
+            The Inventory section allows you to view, manage, and update your product stock levels.
             You can monitor your inventory, track products, and make necessary updates in the system.
             Remember to keep your inventory up-to-date to ensure smooth operations.
           </p>
@@ -120,9 +114,9 @@ const Inventory = () => {
             <table>
               <thead>
                 <tr>
-                  <th>Unique ID</th>
+                  <th>ID</th>
                   <th>Product</th>
-                  <th>Quantity</th>
+                  <th>Qty</th>
                   <th>Status</th>
                   <th>Actions</th>
                 </tr>
@@ -135,7 +129,6 @@ const Inventory = () => {
                     <td>{product.quantity}</td>
                     <td>{product.status}</td>
                     <td>
-                      <button className="btn">Edit</button>
                       <button className="btn">Delete</button>
                     </td>
                   </tr>

@@ -50,12 +50,6 @@ const Activity = () => {
             </Link>
           </li>
           <li>
-            <Link to="/reports">
-              <span className="material-symbols-outlined">description</span>
-              <span>Reports</span>
-            </Link>
-          </li>
-          <li>
             <Link to="/profile">
               <span className="material-symbols-outlined">person</span>
               <span>Profile</span>
@@ -101,9 +95,9 @@ const Activity = () => {
               <table>
                 <thead>
                   <tr>
-                    <th>Unique ID</th>
-                    <th>Product Name</th>
-                    <th>Quantity</th>
+                    <th>ID</th>
+                    <th>Product</th>
+                    <th>Qty</th>
                     <th>Status</th>
                   </tr>
                 </thead>
