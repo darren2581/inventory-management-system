@@ -52,12 +52,6 @@ const Dashboard = () => {
             </Link>
           </li>
           <li>
-            <Link to="/reports">
-              <span className="material-symbols-outlined">description</span>
-              <span>Reports</span>
-            </Link>
-          </li>
-          <li>
             <Link to="/profile">
               <span className="material-symbols-outlined">person</span>
               <span>Profile</span>
