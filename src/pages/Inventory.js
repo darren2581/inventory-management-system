@@ -5,10 +5,26 @@ import { Link } from 'react-router-dom';
 
 const Inventory = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const [products, setProducts] = useState([
+    { name: 'Product A', category: 'Electronics', quantity: 120, status: 'In Stock' },
+    { name: 'Product B', category: 'Furniture', quantity: 30, status: 'Low Stock' },
+    { name: 'GirlsCode (XL)', category: 'Clothing', quantity: 0, status: 'Out of Stock' },
+    { name: 'GirlsCode (L)', category: 'Clothing', quantity: 5, status: 'In Stock' },
+    { name: 'GirlsCode (M)', category: 'Clothing', quantity: 0, status: 'Out of Stock' },
+  ]);
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!isSidebarCollapsed);
   };
+
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
+
+  const filteredProducts = products.filter(product =>
+    product.name.toLowerCase().includes(searchQuery)
+  );
 
   return (
     <div className={`App ${isSidebarCollapsed ? 'collapsed' : ''}`}>
@@ -38,7 +54,7 @@ const Inventory = () => {
           </li>
           <li>
             <Link to="/activity">
-              <span className="material-symbols-outlined">inventory_2</span>
+              <span className="material-symbols-outlined">schedule</span>
               <span>Activity</span>
             </Link>
           </li>
@@ -56,64 +72,17 @@ const Inventory = () => {
           </li>
         </ul>
       </nav>
-      <div className='inventory'>
+      <div className="inventory">
         <div className="container">
-          <h2 className='h2-Inventory'>Inventory</h2>
-          <p className='p-Inventory'>
-            The Inventory section allows you to view, manage, and update your product stock levels.
+          <h2 className="h2-Inventory">Inventory</h2>
+          <p className="p-Inventory">
+            Theis Inventory section allows you to view, manage, and update your product stock levels.
             You can monitor your inventory, track products, and make necessary updates in the system.
+            Remember to keep your inventory up-to-date to ensure smooth operations.
           </p>
 
-          {/* Example Inventory Table */}
-          <section className="inventory-table">
-            <h3 className='head-inventory'>Current Inventory</h3>
-            <table>
-              <thead>
-                <tr>
-                  <th>Product</th>
-                  <th>Category</th>
-                  <th>Quantity</th>
-                  <th>Status</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td>Product A</td>
-                  <td>Electronics</td>
-                  <td>120</td>
-                  <td>In Stock</td>
-                  <td>
-                    <button className="btn">Edit</button>
-                    <button className="btn">Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Product B</td>
-                  <td>Furniture</td>
-                  <td>30</td>
-                  <td>Low Stock</td>
-                  <td>
-                    <button className="btn">Edit</button>
-                    <button className="btn">Delete</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td>Product C</td>
-                  <td>Clothing</td>
-                  <td>0</td>
-                  <td>Out of Stock</td>
-                  <td>
-                    <button className="btn">Edit</button>
-                    <button className="btn">Delete</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </section>
-
-          {/* Example Add New Product */}
-          <section className="add-product">
+          {/* Add Product Section */}
+          <div className="add-product">
             <h3>Add New Product</h3>
             <form>
               <label>Product Name:</label>
@@ -130,7 +99,55 @@ const Inventory = () => {
               </select>
               <button type="submit" className="btn">Add Product</button>
             </form>
-          </section>
+          </div>
+
+          {/* Inventory Table */}
+          <div className="inventory-table">
+            <h3 className="head-inventory">Current Inventory</h3>
+
+            {/* Search Bar */}
+            <div className="search-bar">
+              <label htmlFor="search">Search Products:</label>
+              <input
+                type="text"
+                id="search"
+                placeholder="Type product name..."
+                value={searchQuery}
+                onChange={handleSearch}
+              />
+            </div>
+
+            <table>
+              <thead>
+                <tr>
+                  <th>Product</th>
+                  <th>Category</th>
+                  <th>Quantity</th>
+                  <th>Status</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredProducts.map((product, index) => (
+                  <tr key={index}>
+                    <td>{product.name}</td>
+                    <td>{product.category}</td>
+                    <td>{product.quantity}</td>
+                    <td>{product.status}</td>
+                    <td>
+                      <button className="btn">Edit</button>
+                      <button className="btn">Delete</button>
+                    </td>
+                  </tr>
+                ))}
+                {filteredProducts.length === 0 && (
+                  <tr>
+                    <td colSpan="5">No products found.</td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>

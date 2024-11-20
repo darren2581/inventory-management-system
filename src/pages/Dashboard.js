@@ -39,7 +39,7 @@ const Dashboard = () => {
           </li>
           <li>
             <Link to="/activity">
-              <span className="material-symbols-outlined">inventory_2</span>
+              <span className="material-symbols-outlined">schedule</span>
               <span>Activity</span>
             </Link>
           </li>

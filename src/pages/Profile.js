@@ -38,7 +38,7 @@ const Profile = () => {
           </li>
           <li>
             <Link to="/activity">
-              <span className="material-symbols-outlined">inventory_2</span>
+              <span className="material-symbols-outlined">schedule</span>
               <span>Activity</span>
             </Link>
           </li>
@@ -56,7 +56,7 @@ const Profile = () => {
           </li>
         </ul>
       </nav>
-      <main>
+      <div className='profile'>
         <div className="container">
           <h2>Profile</h2>
           <p>
@@ -70,7 +70,7 @@ const Profile = () => {
             <p>Role: Admin</p>
           </section>
         </div>
-      </main>
+      </div>
     </div>
   );
 }
