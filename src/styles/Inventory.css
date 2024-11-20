@@ -153,18 +153,28 @@
 }
 
 .inventory-table td button {
-    background-color: var(--btn-color);
-    color: var(--secondary-text-clr);
-    border: none;
-    padding: 8px 14px;
+    padding: 5px 10px;
+    background-color: transparent;
+    color: var(--accent-clt);
+    border: 1px solid var(--accent-clt);
     cursor: pointer;
     border-radius: 4px;
     font-size: 14px;
-    transition: background-color 0.3s;
+    transition: all 0.3s ease;
+    display: inline-flex; 
+    justify-content: center; 
+    align-items: center; 
+    margin-right: 5px; 
 }
 
 .inventory-table td button:hover {
-    background-color: var(--btn-hover-clr);
+    background-color: var(--hover-clr); 
+    color: var(--secondary-text-clr);
+    border-color: var(--btn-hover-clr); 
+}
+
+.inventory-table td button .material-symbols-outlined {
+    font-size: 18px;
 }
 
 @media (max-width: 500px){

@@ -129,7 +129,12 @@ const Inventory = () => {
                     <td>{product.quantity}</td>
                     <td>{product.status}</td>
                     <td>
-                      <button className="btn">Delete</button>
+                      <button className="btn">
+                        <span className="material-symbols-outlined">edit</span>
+                      </button>
+                      <button className="btn">
+                        <span className="material-symbols-outlined">delete</span>
+                      </button>
                     </td>
                   </tr>
                 ))}
