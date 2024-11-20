@@ -1,0 +1,56 @@
+.profile {
+    background-color: var(--base-clr);
+    color: var(--div-text-clr);
+    padding: 2rem;
+}
+
+.container-profile{
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid var(--line-clr);
+}
+
+.container-profile h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    color: var(--accent-clt);
+}
+
+.container-profile p {
+    margin: 0.5rem 0;
+    line-height: 1.6;
+    color: var(--secondary-text-clr);
+}
+
+.profile-info {
+    margin-top: 3rem;
+}
+
+.profile-info h3 {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+    color: var(--accent-clt);
+}
+
+.profile-info p {
+    font-size: 1rem;
+    color: var(--secondary-text-clr);
+}
+
+.logout-btn {
+    margin-top: 2rem;
+    padding: 0.5rem 1.2rem;
+    background-color: var(--btn-color);
+    color: var(--secondary-text-clr);
+    font-size: 1rem;
+    font-weight: bold;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .logout-btn:hover {
+    background-color: var(--btn-hover-clr);
+  }
+  
