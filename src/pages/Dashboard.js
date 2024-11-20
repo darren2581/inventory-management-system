@@ -11,6 +11,14 @@ const Dashboard = () => {
     setSidebarCollapsed(!isSidebarCollapsed);
   };
 
+  // Mock data for low/out-of-stock items
+  const lowStockItems = [
+    { id: 1, name: 'Product A', stock: 3, status: 'Low Stock' },
+    { id: 2, name: 'Product B', stock: 0, status: 'Out of Stock' },
+    { id: 3, name: 'Product C', stock: 1, status: 'Low Stock' },
+    { id: 4, name: 'Product D', stock: 0, status: 'Out of Stock' },
+  ];
+
   return (
     <div className={`App ${isSidebarCollapsed ? 'collapsed' : ''}`}>
       <nav id="sidebar">
@@ -57,15 +65,15 @@ const Dashboard = () => {
           </li>
         </ul>
       </nav>
-      <main>
-        <div className="container">
+      <div className="dashboard">
+        <div className="container-dashboard">
           <h2>Dashboard Overview</h2>
           <p>
             Welcome to the Dashboard! Here, you can find a summary of all critical data points, giving you insights into the overall performance and status of your management system.
           </p>
 
-          {/* Example Dashboard Stats */}
-          <section className="dashboard-stats">
+          {/* Dashboard Stats */}
+          <div className="dashboard-stats">
             <div className="stat-card">
               <h3>Total Products</h3>
               <p>1,250</p>
@@ -75,25 +83,43 @@ const Dashboard = () => {
               <p>45</p>
             </div>
             <div className="stat-card">
-              <h3>Reports Generated</h3>
-              <p>328</p>
+              <h3>Out of Stock</h3>
+              <p>10</p>
             </div>
             <div className="stat-card">
-              <h3>Active Users</h3>
-              <p>87</p>
+              <h3>Username</h3>
+              <p>darren2581</p>
             </div>
-          </section>
+          </div>
 
-          {/* Example Graph Section */}
-          <section className="dashboard-graphs">
-            <h3>Recent Trends</h3>
-            <div className="graph-placeholder">
-              {/* Replace this with an actual charting library */}
-              <p>[Graph Placeholder]</p>
-            </div>
-          </section>
+          {/* Restock list section */}
+          <div className="restock-alert">
+            <h3>Restock Items</h3>
+            <table className="list-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Product Name</th>
+                  <th>Stock</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {lowStockItems.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.id}</td>
+                    <td>{item.name}</td>
+                    <td>{item.stock}</td>
+                    <td className={item.status === 'Out of Stock' ? 'out-stock' : 'low-stock'}>
+                      {item.status}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </main>
+      </div>
     </div>
   );
 };

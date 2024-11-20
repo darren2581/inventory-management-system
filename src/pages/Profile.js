@@ -66,11 +66,11 @@ const Profile = () => {
           <div className="profile-info">
             <h3>Personal Information</h3>
             <p>Name: Darren Tan</p>
-            <p>Gender: Male</p>
-            <p>Email: darren2581@gmail.com</p>
+            <p>Username: darren2581</p>
+            <p>Email: darrentanthongen@gmail.com</p>
             <p>Phone: 012-3456789</p>
+            <p>Gender: Male</p>
             <p>Address: 123, Jalan ABC, 12345, Kuala Lumpur</p>
-            <p>Role: Admin</p>
           </div>
           <button className="logout-btn" onClick={() => alert('Logging out...')}>
             Logout

@@ -1,14 +1,22 @@
 .inventory {
     margin-bottom: 60px;
     flex: 1;
-    padding: 30px;
+    /* padding: 30px; */
+    padding: 2rem;
     background-color: var(--base-clr);
+    
+}
+
+.container-inventory{
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid var(--line-clr);
 }
 
 .h2-Inventory {
-    font-size: 32px;
+    font-size: 2rem;
     color: var(--accent-clt);
-    margin-bottom: 15px;
+    margin-bottom: 1.5rem;
 }
 
 .p-Inventory {
@@ -21,14 +29,14 @@
 .add-product {
     margin-top: 40px;
     padding: 20px;
-    background-color: var(--div-backgrounud-clr);
+    /* border: 1px solid var(--line-clr); */
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
     border-radius: 8px;
 }
 
 .add-product h3 {
     font-size: 24px;
-    color: var(--div-text-clr);
+    color: var(--accent-clt);
     margin-bottom: 20px;
 }
 
@@ -40,7 +48,7 @@
 
 .add-product form label {
     font-size: 16px;
-    color: var(--div-text-clr);
+    color: var(--secondary-text-clr);
     margin-bottom: 5px;
 }
 
@@ -64,7 +72,7 @@
 .add-product form button {
     padding: 12px;
     background-color: var(--btn-color);
-    color: white;
+    color: var(--secondary-text-clr);
     font-size: 16px;
     border: none;
     border-radius: 4px;
@@ -86,7 +94,7 @@
 
 .search-bar label {
     font-size: 16px;
-    color: var(--text-clr);
+    color: var(--secondary-text-clr);
     font-weight: bold;
 }
 
@@ -113,7 +121,7 @@
 
 .inventory-table h3 {
     font-size: 24px;
-    color: var(--text-clr);
+    color: var(--accent-clt);
     margin-bottom: 20px;
 }
 
@@ -131,13 +139,13 @@
 }
 
 .inventory-table th {
-    background-color: var(--base-clr);
-    color: var(--text-clr);
+    background-color: var(--hover-clr);
+    color: var(--secondary-text-clr);
     font-weight: bold;
 }
 
 .inventory-table td {
-    color: var(--div-text-clr);
+    color: var(--hover-clr);
 }
 
 .inventory-table tr:hover {
@@ -146,7 +154,7 @@
 
 .inventory-table td button {
     background-color: var(--btn-color);
-    color: white;
+    color: var(--secondary-text-clr);
     border: none;
     padding: 8px 14px;
     cursor: pointer;

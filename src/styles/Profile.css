@@ -4,9 +4,15 @@
     padding: 2rem;
 }
 
+.container-profile{
+    padding: 2rem;
+    border-radius: 10px;
+    border: 1px solid var(--line-clr);
+}
+
 .container-profile h2 {
     font-size: 2rem;
-    margin-bottom: 1rem;
+    margin-bottom: 1.5rem;
     color: var(--accent-clt);
 }
 
@@ -23,19 +29,19 @@
 .profile-info h3 {
     font-size: 1.5rem;
     margin-bottom: 1rem;
-    color: var(--text-clr);
+    color: var(--accent-clt);
 }
 
 .profile-info p {
     font-size: 1rem;
-    color: var(--text-clr);
+    color: var(--secondary-text-clr);
 }
 
 .logout-btn {
     margin-top: 2rem;
     padding: 0.5rem 1.2rem;
     background-color: var(--btn-color);
-    color: #ffffff;
+    color: var(--secondary-text-clr);
     font-size: 1rem;
     font-weight: bold;
     border: none;
