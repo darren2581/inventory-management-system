@@ -1,14 +1,43 @@
-import { React, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { auth, db } from '../Firebase'; // Firebase setup
 import '../styles/Sidebar.css';
 import '../styles/Profile.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [profileData, setProfileData] = useState(null); // Store user profile data
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!isSidebarCollapsed);
   };
+
+  const handleLogout = () => {
+    navigate('/signout'); // Navigate to the SignOut page
+  };
+
+  // Fetch user profile data from Firestore
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            setProfileData(userDoc.data());
+          } else {
+            console.log('No profile found for the user');
+          }
+        } catch (error) {
+          console.error('Error fetching profile data:', error);
+        }
+      }
+    };
+
+    fetchProfileData();
+  }, []);
 
   return (
     <div className={`App ${isSidebarCollapsed ? 'collapsed' : ''}`}>
@@ -50,29 +79,32 @@ const Profile = () => {
           </li>
         </ul>
       </nav>
-      <div className='profile'>
+      <div className="profile">
         <div className="container-profile">
           <h2>Profile</h2>
           <p>
             Welcome to your profile page. Here you can update your personal information, manage your settings, and view your activity.
             Take control of your account and make sure everything is up to date!
           </p>
-          <div className="profile-info">
-            <h3>Personal Information</h3>
-            <p>Name: Darren Tan</p>
-            <p>Username: darren2581</p>
-            <p>Email: darrentanthongen@gmail.com</p>
-            <p>Phone: 012-3456789</p>
-            <p>Gender: Male</p>
-            <p>Address: 123, Jalan ABC, 12345, Kuala Lumpur</p>
-          </div>
-          <button className="logout-btn" onClick={() => alert('Logging out...')}>
+          {profileData ? (
+            <div className="profile-info">
+              <h3>Personal Information</h3>
+              <p>Name: {profileData.fullName || 'N/A'}</p>
+              <p>Username: {profileData.username || 'N/A'}</p>
+              <p>Email: {auth.currentUser?.email || 'N/A'}</p>
+              <p>Gender: {profileData.gender || 'N/A'}</p>
+              <p>Address: {profileData.address || 'N/A'}</p>
+            </div>
+          ) : (
+            <p>Loading profile information...</p>
+          )}
+          <button className="logout-btn" onClick={handleLogout}>
             Logout
           </button>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Profile;

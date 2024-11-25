@@ -1,0 +1,111 @@
+/* Container styling */
+.signup-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+}
+
+/* Form styling */
+.profile-form {
+    background-color: var(--div-backgrounud-clr);
+    padding: 40px;
+    border-radius: 16px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    width: 400px;
+    max-width: 90%;
+    text-align: left;
+    font-family: 'Arial', sans-serif;
+}
+
+/* Form title */
+.profile-form h1 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #4a4a4a;
+    text-align: center;
+}
+
+/* Label styling */
+.profile-form label {
+    display: block;
+    font-size: 14px;
+    color: #6d6d6d;
+    font-weight: 600;
+    margin: 16px 0 8px;
+}
+
+/* Input fields */
+.profile-form input,
+.profile-form select,
+.profile-form textarea {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 14px;
+    background-color: #f9f9f9;
+    transition: all 0.3s ease;
+    outline: none;
+    box-sizing: border-box;
+}
+
+/* Focus state for inputs */
+.profile-form input:focus,
+.profile-form select:focus,
+.profile-form textarea:focus {
+    border-color: #6a5acd;
+    box-shadow: 0 0 8px rgba(106, 90, 205, 0.2);
+}
+
+/* Textarea adjustments */
+.profile-form textarea {
+    resize: none;
+    height: 80px;
+}
+
+/* Button styling */
+.profile-form button {
+    width: 100%;
+    padding: 14px;
+    background: linear-gradient(135deg, #6a5acd, #836fff);
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+}
+
+.profile-form button:hover {
+    background: linear-gradient(135deg, #836fff, #6a5acd);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(106, 90, 205, 0.3);
+}
+
+/* Placeholder text styling */
+.profile-form input::placeholder,
+.profile-form textarea::placeholder {
+    color: #bbb;
+    font-style: italic;
+}
+
+/* Responsive design */
+@media (max-width: 500px) {
+    .profile-form {
+        padding: 20px;
+    }
+
+    .profile-form h1 {
+        font-size: 20px;
+    }
+
+    .profile-form button {
+        font-size: 14px;
+        padding: 12px;
+    }
+}

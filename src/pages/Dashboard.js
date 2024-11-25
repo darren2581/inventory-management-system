@@ -1,6 +1,6 @@
 import { React, useState, useEffect } from 'react';
-import { collection, onSnapshot } from "firebase/firestore";
-import { db } from '../Firebase'; // Ensure you have Firebase initialized
+import { collection, doc, getDoc, onSnapshot } from "firebase/firestore";
+import { auth, db } from '../Firebase'; // Ensure you have Firebase initialized
 import '../App.css';
 import '../styles/Sidebar.css';
 import '../styles/Dashboard.css';
@@ -12,13 +12,14 @@ const Dashboard = () => {
   const [lowStockCount, setLowStockCount] = useState(0);
   const [outOfStockCount, setOutOfStockCount] = useState(0);
   const [inventory, setInventory] = useState([]);
+  const [username, setUsername] = useState('');
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!isSidebarCollapsed);
   };
 
   useEffect(() => {
-    // Fetch data from Firestore when the component mounts
+    // Fetch inventory data from Firestore
     const fetchInventory = () => {
       const productsRef = collection(db, "products");
       onSnapshot(productsRef, (snapshot) => {
@@ -26,21 +27,39 @@ const Dashboard = () => {
           id: doc.id,
           ...doc.data(),
         }));
-        
+
         setInventory(fetchedInventory);
-        
+
         // Calculate stock statistics
         const total = fetchedInventory.length;
         const lowStock = fetchedInventory.filter(item => item.quantity > 0 && item.quantity <= 5).length;
         const outOfStock = fetchedInventory.filter(item => item.quantity === 0).length;
-        
+
         setTotalProducts(total);
         setLowStockCount(lowStock);
         setOutOfStockCount(outOfStock);
       });
     };
 
+    // Fetch user's profile data
+    const fetchUserProfile = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            setUsername(userDoc.data().username || 'Guest'); // Set the username
+          } else {
+            console.log('No profile found for the user');
+          }
+        } catch (error) {
+          console.error('Error fetching user profile:', error);
+        }
+      }
+    };
+
     fetchInventory();
+    fetchUserProfile(); // Call function to fetch user profile
   }, []);
 
   // Filter items with low stock and out of stock
@@ -95,7 +114,7 @@ const Dashboard = () => {
         <div className="container-dashboard">
           <h2>Dashboard Overview</h2>
           <p>
-            Welcome to the Dashboard! Here, you can find a summary of all critical data points, giving you insights into the overall performance and status of your management system.
+            Welcome to the Dashboard, {username}! Here, you can find a summary of all critical data points, giving you insights into the overall performance and status of your management system.
           </p>
 
           {/* Dashboard Stats */}
@@ -114,7 +133,7 @@ const Dashboard = () => {
             </div>
             <div className="stat-card">
               <h3>Username</h3>
-              <p>darren2581</p>
+              <p>{username}</p>
             </div>
           </div>
 
