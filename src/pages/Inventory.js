@@ -1,4 +1,6 @@
-import { React, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { collection, addDoc, deleteDoc, onSnapshot } from "firebase/firestore";
+import { db } from '../Firebase';
 import '../styles/Sidebar.css';
 import '../styles/Inventory.css';
 import { Link } from 'react-router-dom';
@@ -6,13 +8,7 @@ import { Link } from 'react-router-dom';
 const Inventory = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [products, setProducts] = useState([
-    { id: '001', name: 'Product A', quantity: 120, status: 'In Stock' },
-    { id: '002', name: 'Product B', quantity: 30, status: 'Low Stock' },
-    { id: '003', name: 'GirlsCode (XL)', quantity: 0, status: 'Out of Stock' },
-    { id: '004', name: 'GirlsCode (L)', quantity: 5, status: 'In Stock' },
-    { id: '005', name: 'GirlsCode (M)', quantity: 0, status: 'Out of Stock' },
-  ]);
+  const [products, setProducts] = useState([]);
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!isSidebarCollapsed);
@@ -25,6 +21,52 @@ const Inventory = () => {
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchQuery)
   );
+
+  const addProduct = async (event) => {
+    event.preventDefault();
+  
+    const formData = new FormData(event.target);
+    const newProduct = {
+      name: formData.get("name"),
+      id: formData.get("id"),
+      quantity: parseInt(formData.get("quantity"), 10),
+      status: formData.get("status"),
+    };
+  
+    // Check for duplicate name or ID
+    const duplicateProduct = products.find(
+      (product) => product.name.toLowerCase() === newProduct.name.toLowerCase() || product.id === newProduct.id
+    );
+  
+    if (duplicateProduct) {
+      alert("A product with the same name or ID already exists!");
+      return; // Stop further execution
+    }
+  
+    try {
+      await addDoc(collection(db, "products"), newProduct);
+      alert("Product added successfully!");
+      event.target.reset(); // Clear the form after submission
+    } catch (error) {
+      console.error("Error adding product: ", error);
+      alert("Failed to add product!");
+    }
+  };
+
+  const fetchProducts = () => {
+    const productsRef = collection(db, "products");
+    onSnapshot(productsRef, (snapshot) => {
+      const fetchedProducts = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setProducts(fetchedProducts);
+    });
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
     <div className={`App ${isSidebarCollapsed ? 'collapsed' : ''}`}>
@@ -78,21 +120,26 @@ const Inventory = () => {
           {/* Add Product Section */}
           <div className="add-product">
             <h3>Add New Product</h3>
-            <form>
+            <form onSubmit={addProduct}>
               <label>Product Name:</label>
-              <input type="text" placeholder="Enter product name" />
+              <input type="text" name="name" placeholder="Enter product name" required />
+
               <label>Unique ID:</label>
-              <input type="text" placeholder="Enter unique id" />
+              <input type="text" name="id" placeholder="Enter unique id" required />
+
               <label>Quantity:</label>
-              <input type="number" placeholder="Enter quantity" />
+              <input type="number" name="quantity" placeholder="Enter quantity" required />
+
               <label>Status:</label>
-              <select>
-                <option value="in-stock">In Stock</option>
-                <option value="low-stock">Low Stock</option>
-                <option value="out-of-stock">Out of Stock</option>
+              <select name="status" required>
+                <option value="In Stock">In Stock</option>
+                <option value="Low Stock">Low Stock</option>
+                <option value="Out of Stock">Out of Stock</option>
               </select>
+
               <button type="submit" className="btn">Add Product</button>
             </form>
+
           </div>
 
           {/* Inventory Table */}
@@ -122,8 +169,8 @@ const Inventory = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredProducts.map((product, index) => (
-                  <tr key={index}>
+                {filteredProducts.map(product => (
+                  <tr key={product.id}>
                     <td>{product.id}</td>
                     <td>{product.name}</td>
                     <td>{product.quantity}</td>
