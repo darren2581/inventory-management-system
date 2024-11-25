@@ -39,7 +39,13 @@ const Activity = () => {
       id: doc.id,
       ...doc.data(),
     }));
-    setActivities(activityList);
+
+    // Sort activities by timestamp in descending order
+    const sortedActivities = activityList.sort((a, b) => {
+      return b.timestamp.seconds - a.timestamp.seconds;
+    });
+
+    setActivities(sortedActivities);
   };
 
   // Fetch username from Firestore based on user UID
