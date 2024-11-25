@@ -11,3 +11,19 @@
   --btn-color: #15406A;
   --btn-hover-clr: #1e5a8a;
 }
+
+.loading-screen {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  background-color: var(--base-clr);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.loading-screen p {
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+}
