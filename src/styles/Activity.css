@@ -175,3 +175,61 @@
     background-color: var(--hover-clr);
     color: var(--secondary-text-clr);
 }
+
+/* Table Styles */
+.activity-list {
+    margin-top: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.activity-list h3 {
+    font-size: 1.6rem;
+    color: var(--accent-clt);
+    margin-bottom: 15px;
+}
+
+.activity-list table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+.activity-list th,
+.activity-list td {
+    border: 1px solid var(--line-clr);
+  padding: 0.8rem;
+  text-align: left;
+}
+
+.activity-list th {
+    background-color: var(--hover-clr);
+    color: var(--text-clr);
+    font-weight: bold;
+}
+
+.activity-list td {
+    color: var(--secondary-text-clr);
+  }
+
+.activity-list td {
+    font-size: 1rem;
+}
+
+.activity-list .empty-message {
+    text-align: center;
+    font-style: italic;
+    color: #999;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .activity-list table {
+        font-size: 0.9rem;
+    }
+
+    .activity-list th,
+    .activity-list td {
+        padding: 8px;
+    }
+}
