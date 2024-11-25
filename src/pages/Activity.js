@@ -1,4 +1,6 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
+import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
+import { db } from '../Firebase';
 import '../styles/Sidebar.css';
 import '../styles/Activity.css';
 import { Link } from 'react-router-dom';
@@ -6,16 +8,79 @@ import { Link } from 'react-router-dom';
 const Activity = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [itemName, setItemName] = useState('');
-  const [itemId, setItemId] = useState('');
-  const [inventory, setInventory] = useState([
-    { id: '001', name: 'Product A', quantity: 10 },
-    { id: '002', name: 'Product B', quantity: 19 },
-    { id: '003', name: 'Product C', quantity: 100 }
-  ]);
+  const [itemQuantity, setItemQuantity] = useState('');
+  const [inventory, setInventory] = useState([]);
+  const [searchQuery, setSearchQuery] = useState(''); // Search query state for quantity
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!isSidebarCollapsed);
   };
+
+  // Fetch inventory data from Firebase
+  const fetchInventory = () => {
+    const productsRef = collection(db, "products");
+    onSnapshot(productsRef, (snapshot) => {
+      const fetchedInventory = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setInventory(fetchedInventory);
+    });
+  };
+
+  useEffect(() => {
+    fetchInventory(); // Fetch inventory when the component mounts
+  }, []);
+
+  // Function to handle taking an item (decreasing quantity)
+  const takeItem = async () => {
+    if (!itemName || !itemQuantity || itemQuantity <= 0) {
+      alert("Please enter both Item Name and a valid Quantity.");
+      return;
+    }
+
+    // Convert itemQuantity to a number
+    const quantityToTake = parseInt(itemQuantity, 10);
+
+    const product = inventory.find(
+      (item) => item.name.toLowerCase() === itemName.toLowerCase()
+    );
+
+    if (product) {
+      if (product.quantity >= quantityToTake) {
+        try {
+          // Get the reference to the product in Firestore
+          const productDocRef = doc(db, "products", product.id);
+
+          // Update the product quantity in Firebase
+          await updateDoc(productDocRef, {
+            quantity: product.quantity - quantityToTake, // Subtract the entered quantity
+          });
+
+          // alert(`Successfully took ${quantityToTake} item(s) of ${product.name}`);
+          fetchInventory(); // Refresh inventory after the update
+        } catch (error) {
+          console.error("Error updating item: ", error);
+          alert("Failed to update item quantity.");
+        }
+      } else {
+        alert("Not enough stock to take the requested quantity.");
+      }
+    } else {
+      alert("Product not found.");
+    }
+
+    setItemQuantity('');
+    setItemName('');
+  };
+
+  const handleSearch = (event) => {
+    setSearchQuery(event.target.value.toLowerCase());
+  };
+
+  const filteredInventory = inventory.filter((item) =>
+    item.name.toLowerCase().includes(searchQuery)
+  );
 
   return (
     <div className={`App ${isSidebarCollapsed ? 'collapsed' : ''}`}>
@@ -68,25 +133,46 @@ const Activity = () => {
           <div className="inventory-management">
             <h3>Inventory Management</h3>
 
-            {/* Input Section */}
-            <div className="item-actions">
-              <label htmlFor="item-name">Item Name:</label>
+            {/* Search Bar */}
+            <div className="search-bar">
+              <label htmlFor="search">Search Products:</label>
               <input
                 type="text"
+                id="search"
+                placeholder="Search by product name..."
+                value={searchQuery}
+                onChange={handleSearch}
+              />
+            </div>
+
+            {/* Input Section */}
+            <div className="item-actions">
+              <label>Product:</label>
+              <select
                 id="item-name"
                 value={itemName}
                 onChange={(e) => setItemName(e.target.value)}
-                placeholder="Enter item name"
-              />
-              <label htmlFor="item-id">Unique ID:</label>
+                placeholder="Select item">
+                <option value="">Select Item</option>
+                {filteredInventory.length > 0 ? (
+                  filteredInventory.map((item) => (
+                    <option key={item.id} value={item.name}>
+                      {item.name} - {item.quantity > 0 ? `${item.quantity} in stock` : 'Out of Stock'}
+                    </option>
+                  ))
+                ) : (
+                  <option>No products found.</option>
+                )}
+              </select>
+              <label>Quantity:</label>
               <input
-                type="text"
-                id="item-id"
-                value={itemId}
-                onChange={(e) => setItemId(e.target.value)}
-                placeholder="Enter unique ID"
+                type="number"
+                id="item-quantity"
+                value={itemQuantity}
+                onChange={(e) => setItemQuantity(e.target.value)}
+                placeholder="Enter quantity"
               />
-              <button>Take Item</button>
+              <button onClick={takeItem}>Take Item</button>
             </div>
 
             {/* Inventory List */}
@@ -95,22 +181,23 @@ const Activity = () => {
               <table>
                 <thead>
                   <tr>
-                    <th>ID</th>
                     <th>Product</th>
                     <th>Qty</th>
                     <th>Status</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {inventory.length > 0 ? (
-                    inventory.map((item, index) => (
-                      <tr key={index}>
-                        <td>{item.id}</td>
-                        <td>{item.name}</td>
-                        <td>{item.quantity || 'N/A'}</td>
-                        <td>{item.quantity && item.quantity > 0 ? 'In Stock' : 'Out of Stock'}</td>
-                      </tr>
-                    ))
+                  {filteredInventory.length > 0 ? (
+                    filteredInventory.map((item) => {
+                      const quantity = item.quantity === "N/A" ? 0 : item.quantity; // If quantity is "N/A", set it to 0
+                      return (
+                        <tr key={item.id}>
+                          <td>{item.name}</td>
+                          <td>{quantity}</td>
+                          <td>{quantity > 0 ? 'In Stock' : 'Out of Stock'}</td>
+                        </tr>
+                      );
+                    })
                   ) : (
                     <tr>
                       <td colSpan="4">No inventory items available.</td>

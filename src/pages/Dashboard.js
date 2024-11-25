@@ -1,4 +1,6 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
+import { collection, onSnapshot } from "firebase/firestore";
+import { db } from '../Firebase'; // Ensure you have Firebase initialized
 import '../App.css';
 import '../styles/Sidebar.css';
 import '../styles/Dashboard.css';
@@ -6,18 +8,48 @@ import { Link } from 'react-router-dom';
 
 const Dashboard = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [totalProducts, setTotalProducts] = useState(0);
+  const [lowStockCount, setLowStockCount] = useState(0);
+  const [outOfStockCount, setOutOfStockCount] = useState(0);
+  const [inventory, setInventory] = useState([]);
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!isSidebarCollapsed);
   };
 
-  // Mock data for low/out-of-stock items
-  const lowStockItems = [
-    { id: 1, name: 'Product A', stock: 3, status: 'Low Stock' },
-    { id: 2, name: 'Product B', stock: 0, status: 'Out of Stock' },
-    { id: 3, name: 'Product C', stock: 1, status: 'Low Stock' },
-    { id: 4, name: 'Product D', stock: 0, status: 'Out of Stock' },
-  ];
+  useEffect(() => {
+    // Fetch data from Firestore when the component mounts
+    const fetchInventory = () => {
+      const productsRef = collection(db, "products");
+      onSnapshot(productsRef, (snapshot) => {
+        const fetchedInventory = snapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        
+        setInventory(fetchedInventory);
+        
+        // Calculate stock statistics
+        const total = fetchedInventory.length;
+        const lowStock = fetchedInventory.filter(item => item.quantity > 0 && item.quantity <= 5).length;
+        const outOfStock = fetchedInventory.filter(item => item.quantity === 0).length;
+        
+        setTotalProducts(total);
+        setLowStockCount(lowStock);
+        setOutOfStockCount(outOfStock);
+      });
+    };
+
+    fetchInventory();
+  }, []);
+
+  // Filter items with low stock and out of stock
+  const lowStockItems = inventory.filter(
+    item => item.quantity > 0 && item.quantity <= 5 // Consider items with quantity between 1 and 5 as low stock
+  );
+  const outOfStockItems = inventory.filter(
+    item => item.quantity === 0 // Out of stock items with quantity 0
+  );
 
   return (
     <div className={`App ${isSidebarCollapsed ? 'collapsed' : ''}`}>
@@ -70,15 +102,15 @@ const Dashboard = () => {
           <div className="dashboard-stats">
             <div className="stat-card">
               <h3>Total Products</h3>
-              <p>1,250</p>
+              <p>{totalProducts}</p>
             </div>
             <div className="stat-card">
               <h3>Low Stock</h3>
-              <p>45</p>
+              <p>{lowStockCount}</p>
             </div>
             <div className="stat-card">
               <h3>Out of Stock</h3>
-              <p>10</p>
+              <p>{outOfStockCount}</p>
             </div>
             <div className="stat-card">
               <h3>Username</h3>
@@ -92,20 +124,18 @@ const Dashboard = () => {
             <table className="list-table">
               <thead>
                 <tr>
-                  <th>ID</th>
                   <th>Product Name</th>
                   <th>Stock</th>
                   <th>Status</th>
                 </tr>
               </thead>
               <tbody>
-                {lowStockItems.map((item) => (
+                {lowStockItems.concat(outOfStockItems).map((item) => (
                   <tr key={item.id}>
-                    <td>{item.id}</td>
                     <td>{item.name}</td>
-                    <td>{item.stock}</td>
-                    <td className={item.status === 'Out of Stock' ? 'out-stock' : 'low-stock'}>
-                      {item.status}
+                    <td>{item.quantity}</td>
+                    <td className={item.quantity === 0 ? 'out-stock' : 'low-stock'}>
+                      {item.quantity === 0 ? 'Out of Stock' : 'Low Stock'}
                     </td>
                   </tr>
                 ))}

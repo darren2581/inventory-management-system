@@ -1,4 +1,6 @@
-import { React, useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc } from "firebase/firestore";
+import { db } from '../Firebase';
 import '../styles/Sidebar.css';
 import '../styles/Inventory.css';
 import { Link } from 'react-router-dom';
@@ -6,13 +8,15 @@ import { Link } from 'react-router-dom';
 const Inventory = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [products, setProducts] = useState([
-    { id: '001', name: 'Product A', quantity: 120, status: 'In Stock' },
-    { id: '002', name: 'Product B', quantity: 30, status: 'Low Stock' },
-    { id: '003', name: 'GirlsCode (XL)', quantity: 0, status: 'Out of Stock' },
-    { id: '004', name: 'GirlsCode (L)', quantity: 5, status: 'In Stock' },
-    { id: '005', name: 'GirlsCode (M)', quantity: 0, status: 'Out of Stock' },
-  ]);
+  const [products, setProducts] = useState([]);
+  const [editingProduct, setEditingProduct] = useState(null); // Track which product is being edited
+  const [formData, setFormData] = useState({
+    name: '',
+    quantity: '',
+    status: 'In Stock',
+  });
+
+  const addProductSectionRef = useRef(null); // Ref to the Add/Edit product section
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!isSidebarCollapsed);
@@ -25,6 +29,90 @@ const Inventory = () => {
   const filteredProducts = products.filter(product =>
     product.name.toLowerCase().includes(searchQuery)
   );
+
+  const addProduct = async (event) => {
+    event.preventDefault();
+  
+    const newProduct = {
+      name: formData.name,
+      quantity: parseInt(formData.quantity, 10),
+      status: formData.status,
+    };
+  
+    // Check for duplicate name
+    const duplicateProduct = products.find(
+      (product) => product.name.toLowerCase() === newProduct.name.toLowerCase()
+    );
+  
+    if (duplicateProduct) {
+      alert("A product with the same name already exists!");
+      return;
+    }
+  
+    try {
+      await addDoc(collection(db, "products"), newProduct);
+      // alert("Product added successfully!");
+      setFormData({ name: '', quantity: '', status: 'In Stock' }); // Reset form
+    } catch (error) {
+      console.error("Error adding product: ", error);
+      // alert("Failed to add product!");
+    }
+  };
+
+  const fetchProducts = () => {
+    const productsRef = collection(db, "products");
+    onSnapshot(productsRef, (snapshot) => {
+      const fetchedProducts = snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data(),
+      }));
+      setProducts(fetchedProducts);
+    });
+  };
+
+  const deleteProduct = async (productId) => {
+    try {
+      const productDocRef = doc(db, "products", productId);
+      await deleteDoc(productDocRef);
+      setProducts(products.filter(product => product.id !== productId));
+      // alert("Product deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting product: ", error);
+      // alert("Failed to delete product!");
+    }
+  };
+
+  const editProduct = (product) => {
+    setEditingProduct(product);
+    setFormData({
+      name: product.name,
+      quantity: product.quantity,
+      status: product.status,
+    });
+    addProductSectionRef.current.scrollIntoView({ behavior: "smooth" }); // Scroll to the Edit section of the form
+  };
+
+  const updateProduct = async (event) => {
+    event.preventDefault();
+    try {
+      const productDocRef = doc(db, "products", editingProduct.id);
+      await updateDoc(productDocRef, {
+        name: formData.name,
+        quantity: parseInt(formData.quantity, 10),
+        status: formData.status,
+      });
+      setEditingProduct(null); // Clear editing state
+      setFormData({ name: '', quantity: '', status: 'In Stock' }); // Reset form
+      // alert("Product updated successfully!");
+    } catch (error) {
+      console.error("Error updating product: ", error);
+      // alert("Failed to update product!");
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
 
   return (
     <div className={`App ${isSidebarCollapsed ? 'collapsed' : ''}`}>
@@ -76,22 +164,42 @@ const Inventory = () => {
           </p>
 
           {/* Add Product Section */}
-          <div className="add-product">
-            <h3>Add New Product</h3>
-            <form>
+          <div className="add-product" ref={addProductSectionRef}>
+            <h3>{editingProduct ? 'Edit Product' : 'Add New Product'}</h3>
+            <form onSubmit={editingProduct ? updateProduct : addProduct}>
               <label>Product Name:</label>
-              <input type="text" placeholder="Enter product name" />
-              <label>Unique ID:</label>
-              <input type="text" placeholder="Enter unique id" />
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Enter product name"
+                required
+              />
+
               <label>Quantity:</label>
-              <input type="number" placeholder="Enter quantity" />
+              <input
+                type="number"
+                name="quantity"
+                value={formData.quantity}
+                onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+                placeholder="Enter quantity"
+                required
+              />
+
               <label>Status:</label>
-              <select>
-                <option value="in-stock">In Stock</option>
-                <option value="low-stock">Low Stock</option>
-                <option value="out-of-stock">Out of Stock</option>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                required
+              >
+                <option value="In Stock">In Stock</option>
+                <option value="Low Stock">Low Stock</option>
+                <option value="Out of Stock">Out of Stock</option>
               </select>
-              <button type="submit" className="btn">Add Product</button>
+
+              <button type="submit" className="btn">{editingProduct ? 'Update Product' : 'Add Product'}</button>
             </form>
           </div>
 
@@ -114,7 +222,6 @@ const Inventory = () => {
             <table>
               <thead>
                 <tr>
-                  <th>ID</th>
                   <th>Product</th>
                   <th>Qty</th>
                   <th>Status</th>
@@ -122,17 +229,16 @@ const Inventory = () => {
                 </tr>
               </thead>
               <tbody>
-                {filteredProducts.map((product, index) => (
-                  <tr key={index}>
-                    <td>{product.id}</td>
+                {filteredProducts.map(product => (
+                  <tr key={product.id}>
                     <td>{product.name}</td>
                     <td>{product.quantity}</td>
                     <td>{product.status}</td>
                     <td>
-                      <button className="btn">
+                      <button className="btn" onClick={() => editProduct(product)}>
                         <span className="material-symbols-outlined">edit</span>
                       </button>
-                      <button className="btn">
+                      <button className="btn" onClick={() => deleteProduct(product.id)}>
                         <span className="material-symbols-outlined">delete</span>
                       </button>
                     </td>
@@ -140,7 +246,7 @@ const Inventory = () => {
                 ))}
                 {filteredProducts.length === 0 && (
                   <tr>
-                    <td colSpan="5">No products found.</td>
+                    <td colSpan="4">No products found.</td>
                   </tr>
                 )}
               </tbody>
