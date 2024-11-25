@@ -1,6 +1,6 @@
-import { React, useState, useEffect } from 'react';
-import { collection, onSnapshot, doc, updateDoc } from "firebase/firestore";
-import { db } from '../Firebase';
+import React, { useState, useEffect } from 'react';
+import { collection, onSnapshot, doc, updateDoc, addDoc, getDocs, getDoc } from "firebase/firestore";
+import { db, auth } from '../Firebase';
 import '../styles/Sidebar.css';
 import '../styles/Activity.css';
 import { Link } from 'react-router-dom';
@@ -10,7 +10,10 @@ const Activity = () => {
   const [itemName, setItemName] = useState('');
   const [itemQuantity, setItemQuantity] = useState('');
   const [inventory, setInventory] = useState([]);
-  const [searchQuery, setSearchQuery] = useState(''); // Search query state for quantity
+  const [searchQuery, setSearchQuery] = useState('');
+  const [activities, setActivities] = useState([]);
+  const [user, setUser] = useState(null); // store user details
+  const [username, setUsername] = useState(''); // store the username
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!isSidebarCollapsed);
@@ -28,8 +31,36 @@ const Activity = () => {
     });
   };
 
+  // Fetch user activity from Firestore
+  const fetchActivities = async () => {
+    const activitiesRef = collection(db, "activities");
+    const activitySnapshot = await getDocs(activitiesRef);
+    const activityList = activitySnapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data(),
+    }));
+    setActivities(activityList);
+  };
+
+  // Fetch username from Firestore based on user UID
+  const fetchUsername = async () => {
+    const currentUser = auth.currentUser;
+    if (currentUser) {
+      const userRef = doc(db, "users", currentUser.uid); // Get the user document using UID
+      const userDoc = await getDoc(userRef);
+      if (userDoc.exists()) {
+        setUsername(userDoc.data().username); // Set the username if available
+      } else {
+        console.log("No username found in Firestore.");
+      }
+      setUser(currentUser); // Set the user details
+    }
+  };
+
   useEffect(() => {
-    fetchInventory(); // Fetch inventory when the component mounts
+    fetchInventory(); // Fetch inventory 
+    fetchActivities(); // Fetch activities
+    fetchUsername(); // Fetch username
   }, []);
 
   // Function to handle taking an item (decreasing quantity)
@@ -39,7 +70,6 @@ const Activity = () => {
       return;
     }
 
-    // Convert itemQuantity to a number
     const quantityToTake = parseInt(itemQuantity, 10);
 
     const product = inventory.find(
@@ -57,8 +87,16 @@ const Activity = () => {
             quantity: product.quantity - quantityToTake, // Subtract the entered quantity
           });
 
-          // alert(`Successfully took ${quantityToTake} item(s) of ${product.name}`);
-          fetchInventory(); // Refresh inventory after the update
+          // Add activity to Firestore
+          if (user) {
+            await addDoc(collection(db, "activities"), {
+              itemName: product.name,
+              quantityTaken: quantityToTake,
+              username: username || user.email, // Use the fetched username or fallback to email
+              timestamp: new Date(),
+            });
+            fetchActivities(); // Refresh activities after the update
+          }
         } catch (error) {
           console.error("Error updating item: ", error);
           alert("Failed to update item quantity.");
@@ -175,32 +213,31 @@ const Activity = () => {
               <button onClick={takeItem}>Take Item</button>
             </div>
 
-            {/* Inventory List */}
-            <div className="inventory-list">
-              <h3>Inventory Items</h3>
+            {/* Activity List */}
+            <div className="activity-list">
+              <h3>Activity Log</h3>
               <table>
                 <thead>
                   <tr>
-                    <th>Product</th>
-                    <th>Qty</th>
-                    <th>Status</th>
+                    <th>Username</th>
+                    <th>Item</th>
+                    <th>Quantity Taken</th>
+                    <th>Time</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {filteredInventory.length > 0 ? (
-                    filteredInventory.map((item) => {
-                      const quantity = item.quantity === "N/A" ? 0 : item.quantity; // If quantity is "N/A", set it to 0
-                      return (
-                        <tr key={item.id}>
-                          <td>{item.name}</td>
-                          <td>{quantity}</td>
-                          <td>{quantity > 0 ? 'In Stock' : 'Out of Stock'}</td>
-                        </tr>
-                      );
-                    })
+                  {activities.length > 0 ? (
+                    activities.map((activity) => (
+                      <tr key={activity.id}>
+                        <td>{activity.username}</td>
+                        <td>{activity.itemName}</td>
+                        <td>{activity.quantityTaken}</td>
+                        <td>{new Date(activity.timestamp.seconds * 1000).toLocaleString()}</td>
+                      </tr>
+                    ))
                   ) : (
                     <tr>
-                      <td colSpan="4">No inventory items available.</td>
+                      <td colSpan="4">No activity recorded.</td>
                     </tr>
                   )}
                 </tbody>
