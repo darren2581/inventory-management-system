@@ -49,8 +49,8 @@
     font-size: 1rem;
     border: 1px solid var(--line-clr);
     border-radius: 5px;
-    background-color: #fff;
-    color: var(--text-clr);
+    background-color: var(--div-backgrounud-clr);
+    color: black;
 }
 
 .item-actions input:focus {
@@ -144,4 +144,34 @@
         border-radius: 10px;
         border: none;
     }
+}
+
+.item-actions select {
+    padding: 0.8rem;
+    font-size: 1rem;
+    border: 1px solid var(--line-clr);
+    border-radius: 5px;
+    background-color: var(--div-backgrounud-clr);
+    color: black;
+    cursor: pointer;
+    transition: border-color 0.3s ease;
+}
+
+.item-actions select:focus {
+    outline: none;
+    border-color: var(--accent-clt);
+}
+
+.item-actions option {
+    padding: 0.8rem;
+    font-size: 1rem;
+    background-color: var(--div-backgrounud-clr);
+    color: black;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.item-actions option:hover {
+    background-color: var(--hover-clr);
+    color: var(--secondary-text-clr);
 }

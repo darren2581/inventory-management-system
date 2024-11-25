@@ -9,7 +9,7 @@ const Inventory = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [products, setProducts] = useState([]);
-  const [editingProduct, setEditingProduct] = useState(null); // For tracking which product is being edited
+  const [editingProduct, setEditingProduct] = useState(null); // Track which product is being edited
   const [formData, setFormData] = useState({
     name: '',
     quantity: '',
@@ -51,11 +51,11 @@ const Inventory = () => {
   
     try {
       await addDoc(collection(db, "products"), newProduct);
-      alert("Product added successfully!");
+      // alert("Product added successfully!");
       setFormData({ name: '', quantity: '', status: 'In Stock' }); // Reset form
     } catch (error) {
       console.error("Error adding product: ", error);
-      alert("Failed to add product!");
+      // alert("Failed to add product!");
     }
   };
 
@@ -75,10 +75,10 @@ const Inventory = () => {
       const productDocRef = doc(db, "products", productId);
       await deleteDoc(productDocRef);
       setProducts(products.filter(product => product.id !== productId));
-      alert("Product deleted successfully!");
+      // alert("Product deleted successfully!");
     } catch (error) {
       console.error("Error deleting product: ", error);
-      alert("Failed to delete product!");
+      // alert("Failed to delete product!");
     }
   };
 
@@ -89,7 +89,7 @@ const Inventory = () => {
       quantity: product.quantity,
       status: product.status,
     });
-    addProductSectionRef.current.scrollIntoView({ behavior: "smooth" }); // Scroll to the form
+    addProductSectionRef.current.scrollIntoView({ behavior: "smooth" }); // Scroll to the Edit section of the form
   };
 
   const updateProduct = async (event) => {
@@ -103,10 +103,10 @@ const Inventory = () => {
       });
       setEditingProduct(null); // Clear editing state
       setFormData({ name: '', quantity: '', status: 'In Stock' }); // Reset form
-      alert("Product updated successfully!");
+      // alert("Product updated successfully!");
     } catch (error) {
       console.error("Error updating product: ", error);
-      alert("Failed to update product!");
+      // alert("Failed to update product!");
     }
   };
 

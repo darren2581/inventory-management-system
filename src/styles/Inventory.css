@@ -58,7 +58,7 @@
     font-size: 16px;
     border: 1px solid var(--line-clr);
     border-radius: 4px;
-    background-color: #f9f9f9;
+    background-color: var(--div-backgrounud-clr);
 
     transition: border-color 0.3s ease;
 }
