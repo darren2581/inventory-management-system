@@ -1,11 +1,14 @@
-import { React, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { doc, getDoc } from 'firebase/firestore';
+import { auth, db } from '../Firebase'; // Firebase setup
 import '../styles/Sidebar.css';
 import '../styles/Profile.css';
 import { Link, useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const navigate = useNavigate(); // Initialize useNavigate
+  const [profileData, setProfileData] = useState(null); // Store user profile data
+  const navigate = useNavigate();
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!isSidebarCollapsed);
@@ -14,6 +17,27 @@ const Profile = () => {
   const handleLogout = () => {
     navigate('/signout'); // Navigate to the SignOut page
   };
+
+  // Fetch user profile data from Firestore
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      const user = auth.currentUser;
+      if (user) {
+        try {
+          const userDoc = await getDoc(doc(db, 'users', user.uid));
+          if (userDoc.exists()) {
+            setProfileData(userDoc.data());
+          } else {
+            console.log('No profile found for the user');
+          }
+        } catch (error) {
+          console.error('Error fetching profile data:', error);
+        }
+      }
+    };
+
+    fetchProfileData();
+  }, []);
 
   return (
     <div className={`App ${isSidebarCollapsed ? 'collapsed' : ''}`}>
@@ -62,15 +86,18 @@ const Profile = () => {
             Welcome to your profile page. Here you can update your personal information, manage your settings, and view your activity.
             Take control of your account and make sure everything is up to date!
           </p>
-          <div className="profile-info">
-            <h3>Personal Information</h3>
-            <p>Name: Darren Tan</p>
-            <p>Username: darren2581</p>
-            <p>Email: darrentanthongen@gmail.com</p>
-            <p>Phone: 012-3456789</p>
-            <p>Gender: Male</p>
-            <p>Address: 123, Jalan ABC, 12345, Kuala Lumpur</p>
-          </div>
+          {profileData ? (
+            <div className="profile-info">
+              <h3>Personal Information</h3>
+              <p>Name: {profileData.fullName || 'N/A'}</p>
+              <p>Username: {profileData.username || 'N/A'}</p>
+              <p>Email: {auth.currentUser?.email || 'N/A'}</p>
+              <p>Gender: {profileData.gender || 'N/A'}</p>
+              <p>Address: {profileData.address || 'N/A'}</p>
+            </div>
+          ) : (
+            <p>Loading profile information...</p>
+          )}
           <button className="logout-btn" onClick={handleLogout}>
             Logout
           </button>
