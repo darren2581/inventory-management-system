@@ -116,6 +116,7 @@ const Activity = () => {
     setSearchQuery(event.target.value.toLowerCase());
   };
 
+  // Filter inventory based on the search query
   const filteredInventory = inventory.filter((item) =>
     item.name.toLowerCase().includes(searchQuery)
   );
@@ -171,7 +172,7 @@ const Activity = () => {
           <div className="inventory-management">
             <h3>Take Items</h3>
 
-            {/* Search Bar */}
+            {/* Search Bar for filtering items */}
             <div className="search-bar">
               <label htmlFor="search">Search Products:</label>
               <input
@@ -183,7 +184,7 @@ const Activity = () => {
               />
             </div>
 
-            {/* Input Section */}
+            {/* Dropdown for selecting items with search filter */}
             <div className="item-actions">
               <label>Product:</label>
               <select
@@ -213,7 +214,7 @@ const Activity = () => {
               <button onClick={takeItem}>Take Item</button>
             </div>
 
-            {/* Activity List */}
+            {/* Activity Log */}
             <div className="activity-list">
               <h3>Activity Log</h3>
               <table>
