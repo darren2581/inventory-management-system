@@ -1,35 +1,37 @@
 import React, { useState } from 'react';
 import { auth } from '../Firebase';
-import { signInWithEmailAndPassword } from 'firebase/auth';
+import { sendPasswordResetEmail } from 'firebase/auth';
 import '../styles/Authentication.css';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
-export const Login = () => {
+export const ResetPassword = () => {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
     const [error, setError] = useState(''); // State to store error messages
-    const navigate = useNavigate(); // Use navigate for redirection
+    const [successMessage, setSuccessMessage] = useState(''); // State to store success message
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError(''); // Clear any previous error messages
+        setSuccessMessage(''); // Clear previous success messages
+
+        if (!email) {
+            setError('Please enter your email address.');
+            return;
+        }
+
         try {
-            await signInWithEmailAndPassword(auth, email, password);
-            console.log('Login Successfully');
-            navigate('/dashboard'); // Redirect to dashboard page after successful login
+            await sendPasswordResetEmail(auth, email);
+            setSuccessMessage('Password reset email sent successfully! Please check your inbox.');
         } catch (error) {
             console.log('Error:', error.message);
-            handleFirebaseError(error.code); 
+            handleFirebaseError(error.code); // Handle specific error codes
         }
     };
 
     const handleFirebaseError = (code) => {
         switch (code) {
             case 'auth/user-not-found':
-                setError('No user found with this email.');
-                break;
-            case 'auth/wrong-password':
-                setError('Incorrect password. Please try again.');
+                setError('No user found with this email address.');
                 break;
             case 'auth/invalid-email':
                 setError('Invalid email format.');
@@ -43,8 +45,10 @@ export const Login = () => {
         <div className="box-container">
             <div className="auth-container">
                 <form className="auth-form" onSubmit={handleSubmit}>
-                    <h1>Login</h1>
+                    <h1>Reset Password</h1>
                     {error && <p className="error-message">{error}</p>} {/* Display error messages */}
+                    {successMessage && <p className="success-message">{successMessage}</p>} {/* Display success message */}
+
                     <label>
                         Email
                         <input
@@ -55,23 +59,15 @@ export const Login = () => {
                             onChange={(e) => setEmail(e.target.value)}
                         />
                     </label>
-                    <label>
-                        Password
-                        <input
-                            type="password"
-                            name="password"
-                            placeholder="Enter your password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                        />
-                    </label>
-                    <button type="submit">Log In</button>
-                    <p>Don't have an account? <Link to="/signup">Sign Up</Link></p>
-                    <p>Forgot password? <Link to="/reset">Reset Password</Link></p>
+                    <button type="submit">Send Reset Email</button>
+
+                    <p>
+                        Remembered your password? <Link to="/login">Login</Link>
+                    </p>
                 </form>
             </div>
         </div>
     );
 };
 
-export default Login;
+export default ResetPassword;
