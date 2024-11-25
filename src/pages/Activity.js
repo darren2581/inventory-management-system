@@ -126,12 +126,12 @@ const Activity = () => {
         <div className="container-activity">
           <h2>Activities</h2>
           <p>
-            Welcome to the Activity section! Here, you can manage the inventory by adding or removing items.
+            Welcome to the Activity section! Here, you can update the items that have been taken from the inventory.
             This section allows you to keep track of your product inventory, ensuring that everything stays up-to-date and well-managed.
             You can view your current inventory and perform actions such as taking stock out when needed.
           </p>
           <div className="inventory-management">
-            <h3>Inventory Management</h3>
+            <h3>Take Items</h3>
 
             {/* Search Bar */}
             <div className="search-bar">
