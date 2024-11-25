@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { collection, addDoc, deleteDoc, onSnapshot } from "firebase/firestore";
+import React, { useState, useEffect, useRef } from 'react';
+import { collection, addDoc, onSnapshot, deleteDoc, doc, updateDoc } from "firebase/firestore";
 import { db } from '../Firebase';
 import '../styles/Sidebar.css';
 import '../styles/Inventory.css';
@@ -9,6 +9,14 @@ const Inventory = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
   const [products, setProducts] = useState([]);
+  const [editingProduct, setEditingProduct] = useState(null); // For tracking which product is being edited
+  const [formData, setFormData] = useState({
+    name: '',
+    quantity: '',
+    status: 'In Stock',
+  });
+
+  const addProductSectionRef = useRef(null); // Ref to the Add/Edit product section
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!isSidebarCollapsed);
@@ -25,28 +33,26 @@ const Inventory = () => {
   const addProduct = async (event) => {
     event.preventDefault();
   
-    const formData = new FormData(event.target);
     const newProduct = {
-      name: formData.get("name"),
-      id: formData.get("id"),
-      quantity: parseInt(formData.get("quantity"), 10),
-      status: formData.get("status"),
+      name: formData.name,
+      quantity: parseInt(formData.quantity, 10),
+      status: formData.status,
     };
   
-    // Check for duplicate name or ID
+    // Check for duplicate name
     const duplicateProduct = products.find(
-      (product) => product.name.toLowerCase() === newProduct.name.toLowerCase() || product.id === newProduct.id
+      (product) => product.name.toLowerCase() === newProduct.name.toLowerCase()
     );
   
     if (duplicateProduct) {
-      alert("A product with the same name or ID already exists!");
-      return; // Stop further execution
+      alert("A product with the same name already exists!");
+      return;
     }
   
     try {
       await addDoc(collection(db, "products"), newProduct);
       alert("Product added successfully!");
-      event.target.reset(); // Clear the form after submission
+      setFormData({ name: '', quantity: '', status: 'In Stock' }); // Reset form
     } catch (error) {
       console.error("Error adding product: ", error);
       alert("Failed to add product!");
@@ -62,6 +68,46 @@ const Inventory = () => {
       }));
       setProducts(fetchedProducts);
     });
+  };
+
+  const deleteProduct = async (productId) => {
+    try {
+      const productDocRef = doc(db, "products", productId);
+      await deleteDoc(productDocRef);
+      setProducts(products.filter(product => product.id !== productId));
+      alert("Product deleted successfully!");
+    } catch (error) {
+      console.error("Error deleting product: ", error);
+      alert("Failed to delete product!");
+    }
+  };
+
+  const editProduct = (product) => {
+    setEditingProduct(product);
+    setFormData({
+      name: product.name,
+      quantity: product.quantity,
+      status: product.status,
+    });
+    addProductSectionRef.current.scrollIntoView({ behavior: "smooth" }); // Scroll to the form
+  };
+
+  const updateProduct = async (event) => {
+    event.preventDefault();
+    try {
+      const productDocRef = doc(db, "products", editingProduct.id);
+      await updateDoc(productDocRef, {
+        name: formData.name,
+        quantity: parseInt(formData.quantity, 10),
+        status: formData.status,
+      });
+      setEditingProduct(null); // Clear editing state
+      setFormData({ name: '', quantity: '', status: 'In Stock' }); // Reset form
+      alert("Product updated successfully!");
+    } catch (error) {
+      console.error("Error updating product: ", error);
+      alert("Failed to update product!");
+    }
   };
 
   useEffect(() => {
@@ -118,28 +164,43 @@ const Inventory = () => {
           </p>
 
           {/* Add Product Section */}
-          <div className="add-product">
-            <h3>Add New Product</h3>
-            <form onSubmit={addProduct}>
+          <div className="add-product" ref={addProductSectionRef}>
+            <h3>{editingProduct ? 'Edit Product' : 'Add New Product'}</h3>
+            <form onSubmit={editingProduct ? updateProduct : addProduct}>
               <label>Product Name:</label>
-              <input type="text" name="name" placeholder="Enter product name" required />
-
-              <label>Unique ID:</label>
-              <input type="text" name="id" placeholder="Enter unique id" required />
+              <input
+                type="text"
+                name="name"
+                value={formData.name}
+                onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                placeholder="Enter product name"
+                required
+              />
 
               <label>Quantity:</label>
-              <input type="number" name="quantity" placeholder="Enter quantity" required />
+              <input
+                type="number"
+                name="quantity"
+                value={formData.quantity}
+                onChange={(e) => setFormData({ ...formData, quantity: e.target.value })}
+                placeholder="Enter quantity"
+                required
+              />
 
               <label>Status:</label>
-              <select name="status" required>
+              <select
+                name="status"
+                value={formData.status}
+                onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                required
+              >
                 <option value="In Stock">In Stock</option>
                 <option value="Low Stock">Low Stock</option>
                 <option value="Out of Stock">Out of Stock</option>
               </select>
 
-              <button type="submit" className="btn">Add Product</button>
+              <button type="submit" className="btn">{editingProduct ? 'Update Product' : 'Add Product'}</button>
             </form>
-
           </div>
 
           {/* Inventory Table */}
@@ -161,7 +222,6 @@ const Inventory = () => {
             <table>
               <thead>
                 <tr>
-                  <th>ID</th>
                   <th>Product</th>
                   <th>Qty</th>
                   <th>Status</th>
@@ -171,15 +231,14 @@ const Inventory = () => {
               <tbody>
                 {filteredProducts.map(product => (
                   <tr key={product.id}>
-                    <td>{product.id}</td>
                     <td>{product.name}</td>
                     <td>{product.quantity}</td>
                     <td>{product.status}</td>
                     <td>
-                      <button className="btn">
+                      <button className="btn" onClick={() => editProduct(product)}>
                         <span className="material-symbols-outlined">edit</span>
                       </button>
-                      <button className="btn">
+                      <button className="btn" onClick={() => deleteProduct(product.id)}>
                         <span className="material-symbols-outlined">delete</span>
                       </button>
                     </td>
@@ -187,7 +246,7 @@ const Inventory = () => {
                 ))}
                 {filteredProducts.length === 0 && (
                   <tr>
-                    <td colSpan="5">No products found.</td>
+                    <td colSpan="4">No products found.</td>
                   </tr>
                 )}
               </tbody>
