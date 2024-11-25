@@ -1,13 +1,18 @@
 import { React, useState } from 'react';
 import '../styles/Sidebar.css';
 import '../styles/Profile.css';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const Profile = () => {
   const [isSidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const navigate = useNavigate(); // Initialize useNavigate
 
   const toggleSidebar = () => {
     setSidebarCollapsed(!isSidebarCollapsed);
+  };
+
+  const handleLogout = () => {
+    navigate('/signout'); // Navigate to the SignOut page
   };
 
   return (
@@ -50,7 +55,7 @@ const Profile = () => {
           </li>
         </ul>
       </nav>
-      <div className='profile'>
+      <div className="profile">
         <div className="container-profile">
           <h2>Profile</h2>
           <p>
@@ -66,13 +71,13 @@ const Profile = () => {
             <p>Gender: Male</p>
             <p>Address: 123, Jalan ABC, 12345, Kuala Lumpur</p>
           </div>
-          <button className="logout-btn" onClick={() => alert('Logging out...')}>
+          <button className="logout-btn" onClick={handleLogout}>
             Logout
           </button>
         </div>
       </div>
     </div>
   );
-}
+};
 
 export default Profile;
