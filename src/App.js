@@ -9,6 +9,7 @@ import SignUp from './pages/Signup';
 import SignOut from './pages/SignOut';
 import NewProfileDetails from './pages/NewProfileDetails';
 import { onAuthStateChanged } from 'firebase/auth';
+import ResetPassword from './pages/ResetPassword';
 import { auth } from './Firebase';
 
 // PrivateRoute component for protected routes
@@ -71,6 +72,8 @@ function App() {
             path="/signout"
             element={<PrivateRoute user={user}><SignOut /></PrivateRoute>} // SignOut is now protected
           />
+
+          <Route path="/reset" element={<ResetPassword />} />
 
           {/* Redirect unknown routes to login */}
           <Route path="*" element={<Navigate to="/login" />} />
